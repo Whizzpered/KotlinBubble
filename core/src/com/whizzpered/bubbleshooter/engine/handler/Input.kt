@@ -1,4 +1,4 @@
-package com.whizzpered.bubbleshooter.handler
+package com.whizzpered.bubbleshooter.engine.handler
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input
@@ -6,7 +6,7 @@ import com.badlogic.gdx.InputAdapter
 
 import com.whizzpered.bubbleshooter.engine.memory.ActionContainer
 
-class Input {
+object Input {
 	val keyboard = Keyboard();
 	val touch = Array(10) { Touch() }
 	val mouse = touch[0]
@@ -82,6 +82,7 @@ class Input {
 					val t = touch[pointer]
 					t.dx = screenX - t.x
 					t.dy = screenY - t.y
+					println("${t.dx}:${t.dy}, ${pointer}")
 					t.x = screenX
 					t.y = screenY
 					t.draggedActions(null)
@@ -223,9 +224,9 @@ class Touch {
 			button = Button.COMPLEX
 	}
 
-	fun isPressed(): Boolean {
-		return leftButton || middleButton || rightButton
-	}
+	var pressed: Boolean = false
+		get() = leftButton || middleButton || rightButton
+		private set
 
 	var leftButton = false
 		internal set

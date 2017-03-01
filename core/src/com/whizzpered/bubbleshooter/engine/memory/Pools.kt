@@ -42,7 +42,6 @@ open class PoolConfiguration<T : Poolable> : AbstractPoolConfiguration<T> {
 
         override fun lock(): T {
             if (stack.empty()) {
-                println("Pool ${this.toString()} created new entity.")
                 val v = parent.fabricator(this)
                 v.init()
                 v.lock()
