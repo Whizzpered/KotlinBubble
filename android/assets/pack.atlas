@@ -1,0 +1,88 @@
+
+pack.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+enemy
+  rotate: false
+  xy: 504, 202
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+hero
+  rotate: false
+  xy: 2, 2
+  size: 500, 700
+  orig: 500, 700
+  offset: 0, 0
+  index: -1
+
+pack2.png
+size: 1024,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+enemy/body
+  rotate: false
+  xy: 2, 2
+  size: 465, 469
+  orig: 465, 469
+  offset: 0, 0
+  index: -1
+enemy/left_eye
+  rotate: false
+  xy: 469, 325
+  size: 152, 146
+  orig: 152, 146
+  offset: 0, 0
+  index: -1
+enemy/right_eye
+  rotate: false
+  xy: 469, 195
+  size: 131, 128
+  orig: 131, 128
+  offset: 0, 0
+  index: -1
+
+pack3.png
+size: 512,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+hero/body
+  rotate: false
+  xy: 2, 399
+  size: 441, 590
+  orig: 441, 590
+  offset: 0, 0
+  index: -1
+hero/cap
+  rotate: false
+  xy: 2, 220
+  size: 278, 177
+  orig: 278, 177
+  offset: 0, 0
+  index: -1
+hero/eye
+  rotate: false
+  xy: 282, 258
+  size: 145, 139
+  orig: 145, 139
+  offset: 0, 0
+  index: -1
+hero/month
+  rotate: false
+  xy: 2, 2
+  size: 85, 54
+  orig: 85, 54
+  offset: 0, 0
+  index: -1
+hero/pompon
+  rotate: false
+  xy: 2, 58
+  size: 158, 160
+  orig: 158, 160
+  offset: 0, 0
+  index: -1
