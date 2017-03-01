@@ -173,11 +173,11 @@
 		};
 		B084C35D72617E8B2D9BC817 /* Multi-OS Engine */ = {
 			isa = PBXGroup;
-			name = "Multi-OS Engine";
-			sourceTree = "<group>";
 			children = (
 				4F2CA9AFB9B05C8C6B2AF982 /* moe-main-interfaces.m */,
 			);
+			name = "Multi-OS Engine";
+			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 

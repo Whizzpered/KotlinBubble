@@ -3,6 +3,7 @@ package com.whizzpered.bubbleshooter.engine.handler
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -20,6 +21,8 @@ object Main : ApplicationAdapter() {
             return delta / 1000f
         }
     }
+
+    private var camera: OrthographicCamera? = null
 
     internal var renderThread: Thread? = null
     val proc = Runtime.getRuntime().availableProcessors()
@@ -57,7 +60,7 @@ object Main : ApplicationAdapter() {
         batch = SpriteBatch()
         Game.init()
         atlas = TextureAtlas(Gdx.files.internal("pack.atlas"))
-
+        camera = OrthographicCamera(16f, 12f)
         resume()
 
     }
@@ -71,16 +74,17 @@ object Main : ApplicationAdapter() {
     override fun render() {
         if (!paused || Platform.desktop) {
             if (Gdx.graphics.width > Gdx.graphics.height) {
-                Game.camera.viewportWidth = width.toFloat() / (height.toFloat() / Game.height)
-                Game.camera.viewportHeight = Game.height
+                camera?.viewportWidth = width.toFloat() / (height.toFloat() / Game.height)
+                camera?.viewportHeight = Game.height
             } else {
-                Game.camera.viewportHeight = height.toFloat() / (width.toFloat() / Game.height)
-                Game.camera.viewportWidth = Game.height
+                camera?.viewportHeight = height.toFloat() / (width.toFloat() / Game.height)
+                camera?.viewportWidth = Game.height
             }
             if (Platform.iOS) Gdx.gl.glViewport(0, 0, width, height)
-            Game.camera.update()
-            batch?.projectionMatrix = Game.camera.projection
-
+            camera?.position?.set(Game.camera.x, Game.camera.y, 0f)
+            camera?.update()
+            batch?.projectionMatrix = camera?.combined
+            batch?.begin()
             renderThread = Thread.currentThread()
             Gdx.gl.glEnable(GL20.GL_BLEND)
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA)
@@ -88,6 +92,7 @@ object Main : ApplicationAdapter() {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT or
                     if (Gdx.graphics.bufferFormat.coverageSampling) GL20.GL_COVERAGE_BUFFER_BIT_NV else 0)
             Game.render(renderDelta())
+            batch?.end()
         }
     }
 

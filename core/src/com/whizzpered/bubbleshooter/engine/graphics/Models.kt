@@ -19,8 +19,8 @@ abstract class Shape {
     var angle = 0f
 
     fun project(angle: Float): Point {
-        val px = (MathUtils.cos(angle) * position.x - MathUtils.sin(angle) * position.y)
-        val py = position.z - (MathUtils.sin(angle) * position.x + MathUtils.cos(angle) * position.y) / 5f
+        val px = (MathUtils.cos(-angle) * position.x - MathUtils.sin(-angle) * position.y)
+        val py = position.z - (MathUtils.sin(-angle) * position.x + MathUtils.cos(-angle) * position.y) / 5f
         return Point(px, py)
     }
 
@@ -97,12 +97,10 @@ class Billboard : Shape {
         val v = libgdxsprite
         if (v != null) {
             val p = project(angle)
-            Main.batch?.begin()
             v.x = x + p.x - width / 2 * (1 + deformation * sin(angle))
             v.y = z + y + p.y - height / 2
             v.setSize(width * (1 + deformation * sin(angle)), height)
             v.draw(Main.batch)
-            Main.batch?.end()
         }
     }
 
@@ -193,10 +191,10 @@ class Model : Shape {
                 if (a == null || b == null)
                     return 0
                 else {
-                    val ya = a.position.x * MathUtils.sin(tangle) +
-                            a.position.y * MathUtils.cos(tangle) + a.priority
-                    val yb = b.position.x * MathUtils.sin(tangle) +
-                            b.position.y * MathUtils.cos(tangle) + b.priority
+                    val ya = a.position.x * MathUtils.sin(-tangle) +
+                            a.position.y * MathUtils.cos(-tangle) + a.priority
+                    val yb = b.position.x * MathUtils.sin(-tangle) +
+                            b.position.y * MathUtils.cos(-tangle) + b.priority
                     return ya.compareTo(yb)
                 }
             }
