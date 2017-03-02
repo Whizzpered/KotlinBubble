@@ -55,6 +55,7 @@ open class PoolConfiguration<T : Poolable> : AbstractPoolConfiguration<T> {
 
         override fun unlock(obj: Any) {
             try {
+                if (stack.size < parent.limit)
                 stack.push(obj as T)
                 (obj as T).reset()
             } catch (e: ClassCastException) {

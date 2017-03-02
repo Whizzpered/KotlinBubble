@@ -1,12 +1,10 @@
 package com.whizzpered.bubbleshooter.game
 
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.whizzpered.bubbleshooter.engine.entities.Entity
 import com.whizzpered.bubbleshooter.engine.graphics.MutablePoint
 import com.whizzpered.bubbleshooter.engine.graphics.Point
-import com.whizzpered.bubbleshooter.engine.handler.Platform
+import com.whizzpered.bubbleshooter.engine.handler.Main
 import com.whizzpered.bubbleshooter.engine.memory.Context
-import com.whizzpered.bubbleshooter.engine.handler.Input
 import com.whizzpered.bubbleshooter.game.creatures.Enemy
 import com.whizzpered.bubbleshooter.game.creatures.Hero
 import java.util.*
@@ -21,12 +19,20 @@ object Game {
     val camera = MutablePoint(0f, 0f)
     val height = 6f
 
+    fun project(screenX: Float, screenY: Float): Point {
+        val sx = (screenX - Main.width / 2).toFloat() /
+                (Main.width.toFloat() / Main.camera!!.viewportWidth!!.toFloat())
+        val sy = (Main.height / 2 - screenY).toFloat() /
+                (Main.height.toFloat() / Main.camera!!.viewportHeight!!.toFloat())
+        return Point(sx + camera.x, sy + camera.y)
+    }
+
     fun init() {
         for (i in 0..50) {
             val enemy = context new Enemy.config
             enemy.position.set(
                     x = (random.nextFloat() - .5f) * 10,
-            y = (random.nextFloat() - .5f) * 100
+                    y = (random.nextFloat() - .5f) * 10
             )
             enemy.target.set(
                     x = (random.nextFloat() - .5f) * 10,
@@ -35,7 +41,6 @@ object Game {
             context += enemy
         }
         context += context new Hero.config
-
     }
 
     fun act(delta: Float) {

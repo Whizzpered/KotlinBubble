@@ -3,6 +3,7 @@ package com.whizzpered.bubbleshooter.game.creatures
 import com.badlogic.gdx.math.MathUtils
 import com.whizzpered.bubbleshooter.engine.graphics.Billboard
 import com.whizzpered.bubbleshooter.engine.graphics.Model
+import com.whizzpered.bubbleshooter.engine.graphics.Point
 import com.whizzpered.bubbleshooter.engine.handler.Input
 import com.whizzpered.bubbleshooter.engine.handler.Key
 import com.whizzpered.bubbleshooter.engine.handler.Platform
@@ -53,6 +54,22 @@ class Hero : Creature {
 
     override fun lock() {
         MAX_VELOCITY.originalValue = 2f
+
+        Input.touch.forEach {
+            val t = it
+            it.releasedActions.add {
+                if (t.pressedTime < 0.25f) {
+                    val v = Game.context new Bubble.config
+                    val target = Game.project(t.x.toFloat(), t.y.toFloat())
+                    val sangle = MathUtils.atan2(target.y - position.y, target.x - position.x)
+                    v.position.set(position.x, position.y)
+                    v.velocity.set(MathUtils.cos(sangle), MathUtils.sin(sangle))
+                    Game.context += v
+                } else {
+
+                }
+            }
+        }
     }
 
     var target = this.position.copy()
@@ -71,11 +88,11 @@ class Hero : Creature {
             if (Input.keyboard.isKeyDown(Key.A, Key.LEFT))
                 x -= 1f
         } else {
-            Input.touch.forEach { if (it.pressed) x += it.dx.toFloat() }
-            Input.touch.forEach { if (it.pressed) y -= it.dy.toFloat() }
-            if (Math.abs(x) < 3) x = 0f
-            if (Math.abs(y) < 3) y = 0f
-
+            val m = Input.mouse
+            if (m.pressed) {
+                x = (m.x - m.bx).toFloat()
+                y = -(m.y - m.by).toFloat()
+            }
         }
         if (x != 0f || y != 0f) {
             angle = MathUtils.atan2(y, x)

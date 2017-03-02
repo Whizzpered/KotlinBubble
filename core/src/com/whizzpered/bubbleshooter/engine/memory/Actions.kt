@@ -1,9 +1,9 @@
 package com.whizzpered.bubbleshooter.engine.memory
 
 class ActionContainer<T> {
-	private val l: MutableList<(T) -> Void> = mutableListOf()
+	private val l: MutableList<(T) -> Unit> = mutableListOf()
 
-	fun add(action: (T) -> Void) {
+	fun add(action: (T) -> Unit) {
 		synchronized(l) {
 			l += action
 		}
