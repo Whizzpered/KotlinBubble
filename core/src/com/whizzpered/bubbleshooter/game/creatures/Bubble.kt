@@ -6,15 +6,16 @@ import com.whizzpered.bubbleshooter.engine.memory.AbstractPool
 import com.whizzpered.bubbleshooter.engine.memory.AbstractPoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.PoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.Poolable
+import com.whizzpered.bubbleshooter.game.Game
 
 private val model = Model {
-    it += Billboard("enemy/right_eye", 0.5f, 0.5f, 0f, 0f, 0f)
+    it += Billboard("enemy/right_eye", 0.5f, 0.5f, 0f, 0f, 0.5f)
 }
 
 class Bubble : Creature {
 
     //POOL\//
-    companion object config : PoolConfiguration<Bubble>(32, { Bubble(it) })
+    companion object config : PoolConfiguration<Bubble>(128, { Bubble(it) })
 
     override fun getPoolConfigurator(): AbstractPoolConfiguration<out Poolable> {
         return config
@@ -30,18 +31,20 @@ class Bubble : Creature {
     override fun reset() {
     }
 
-    private var lifetime = 10f
+    private var lifetime = 2f
 
     override fun lock() {
-        MAX_VELOCITY.originalValue = 10f
-        lifetime = 10f
+        MAX_VELOCITY.originalValue = 15f
+        lifetime = 2f
     }
 
     val movementHandler = handler { delta ->
         position += velocity * (delta * MAX_VELOCITY.value)
         lifetime -= delta
         if (lifetime <= 0)
-            unlock()
+            if (game is Game)
+                (game as Game).context -= this
+
     }
 
     val renderHandler = handler { delta ->

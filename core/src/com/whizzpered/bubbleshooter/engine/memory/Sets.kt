@@ -39,7 +39,6 @@ class UnpureSet<T>(val length: Int) {
         do {
             if (content[i] == t) {
                 content[i] = null
-                return true
             }
         } while (++i < range)
         return false
@@ -128,13 +127,14 @@ class UnpureSet<T>(val length: Int) {
     }
 }
 
-class Context<T : Poolable>(val length: Int) {
+class Context<T : Poolable>(val length: Int,
+                            private val handleAdding: (T) -> Unit = {},
+                            private val handleRemoving: (T) -> Unit = {}) {
     val pools = mutableListOf<Pair<AbstractPoolConfiguration<out T>, AbstractPool<out T>>>()
 
     infix fun <G : T> new(p: PoolConfiguration<G>): G {
         synchronized(pools) {
             pools.forEach { if (it.first == p) return it.second.lock() as G }
-
             val pc = p.pool
             pools += Pair(p, pc)
             return pc()
@@ -144,6 +144,7 @@ class Context<T : Poolable>(val length: Int) {
     private val content = UnpureSet<T>(length)
 
     fun add(t: T) {
+        handleAdding(t)
         if (!content.add(t)) {
             System.err.println("Context ${this} overflowed!!!")
             t.unlock()
@@ -155,6 +156,7 @@ class Context<T : Poolable>(val length: Int) {
     fun sorted(comparator: (T, T) -> Int) = content.sorted(comparator)
 
     fun remove(t: T) {
+        handleRemoving(t)
         t.unlock()
         content.remove(t)
     }

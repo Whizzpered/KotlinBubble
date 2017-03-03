@@ -10,6 +10,24 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.whizzpered.bubbleshooter.game.Game
 
+object EMPTY_GAME : AbstractGame() {
+    override fun init() {
+
+    }
+
+    override fun act(delta: Float) {
+
+    }
+
+    override fun ai(delta: Float) {
+
+    }
+
+    override fun render(delta: Float) {
+
+    }
+}
+
 object Main : ApplicationAdapter() {
     class Delta {
         private var last = System.currentTimeMillis()
@@ -21,6 +39,8 @@ object Main : ApplicationAdapter() {
             return delta / 1000f
         }
     }
+
+    var game: AbstractGame = Game
 
     var camera: OrthographicCamera? = null
         private set
@@ -82,7 +102,10 @@ object Main : ApplicationAdapter() {
                 camera?.viewportWidth = Game.height
             }
             if (Platform.iOS) Gdx.gl.glViewport(0, 0, width, height)
-            camera?.position?.set(Game.camera.x, Game.camera.y, 0f)
+            camera?.position?.set(
+                    Math.round(Game.camera.x * 100f) / 100f,
+                    Math.round(Game.camera.y * 100f) / 100f,
+                    0f)
             camera?.update()
             batch?.projectionMatrix = camera?.combined
             batch?.begin()
@@ -95,6 +118,8 @@ object Main : ApplicationAdapter() {
             Game.render(renderDelta())
             batch?.end()
         }
+        if (Input.keyboard[Key.MAC_COMMAND + Key.W])
+            Gdx.app.exit()
     }
 
     override fun dispose() {
