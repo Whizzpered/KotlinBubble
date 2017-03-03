@@ -22,7 +22,8 @@ object Main : ApplicationAdapter() {
         }
     }
 
-    private var camera: OrthographicCamera? = null
+    var camera: OrthographicCamera? = null
+        private set
 
     internal var renderThread: Thread? = null
     val proc = Runtime.getRuntime().availableProcessors()

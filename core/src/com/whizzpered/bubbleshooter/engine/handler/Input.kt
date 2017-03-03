@@ -32,6 +32,8 @@ object Input {
 					t.dy = 0
 					t.x = screenX
 					t.y = screenY
+					t.bx = screenX
+					t.by = screenY
 					var b = Button.NONE
 					when (button) {
 						Input.Buttons.LEFT -> {
@@ -46,6 +48,7 @@ object Input {
 					}
 					t.update()
 					t.pressedActions(b)
+					t.pressTime = System.currentTimeMillis()
 					return true
 				}
 				return false
@@ -72,6 +75,7 @@ object Input {
 					}
 					t.update()
 					t.releasedActions(b)
+					t.pressTime = System.currentTimeMillis()
 					return true
 				}
 				return false
@@ -211,23 +215,18 @@ class Touch {
 	val movedActions = ActionContainer<Any?>()
 	val scrolledActions = ActionContainer<Int>()
 
-	internal fun update() {
-		if (!leftButton && !middleButton && !rightButton)
-			button = Button.NONE
-		else if (leftButton && !middleButton && !rightButton)
-			button = Button.LEFT
-		else if (!leftButton && middleButton && !rightButton)
-			button = Button.MIDDLE
-		else if (!leftButton && !middleButton && rightButton)
-			button = Button.RIGHT
-		else
-			button = Button.COMPLEX
-	}
+	internal var pressTime = System.currentTimeMillis()
+	internal var releaseTime = System.currentTimeMillis()
 
-	var pressed: Boolean = false
+	var pressed = false
 		get() = leftButton || middleButton || rightButton
 		private set
 
+	var pressedTime = 0f
+		get() = (System.currentTimeMillis() - pressTime) / 1000f
+	var releasedTime = 0f
+		get() = (System.currentTimeMillis() - releaseTime) / 1000f
+		private set
 	var leftButton = false
 		internal set
 	var middleButton = false
@@ -244,6 +243,23 @@ class Touch {
 		internal set
 	var dy = 0
 		internal set
+	var bx = 0
+		internal set
+	var by = 0
+		internal set
 	var scroll = 0
 		internal set
+
+	internal fun update() {
+		if (!leftButton && !middleButton && !rightButton)
+			button = Button.NONE
+		else if (leftButton && !middleButton && !rightButton)
+			button = Button.LEFT
+		else if (!leftButton && middleButton && !rightButton)
+			button = Button.MIDDLE
+		else if (!leftButton && !middleButton && rightButton)
+			button = Button.RIGHT
+		else
+			button = Button.COMPLEX
+	}
 }
