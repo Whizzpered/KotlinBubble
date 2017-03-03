@@ -55,8 +55,8 @@ class Enemy : Creature {
             velocity.y = 0f
 
             target.set(
-                    x = (Game.random.nextFloat() - .5f) * 10,
-                    y = (Game.random.nextFloat() - .5f) * 10
+                    x = (game.random.nextFloat() - .5f) * 30,
+                    y = (game.random.nextFloat() - .5f) * 30
             )
         }
         velocity += acceleration * delta

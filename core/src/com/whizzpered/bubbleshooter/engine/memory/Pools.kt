@@ -1,17 +1,21 @@
 package com.whizzpered.bubbleshooter.engine.memory
 
+import java.io.Serializable
+
 interface Poolable {
     fun getPoolConfigurator(): AbstractPoolConfiguration<out Poolable>
     val pool: AbstractPool<out Poolable>
+    val actionContainers: MutableList<ActionContainer<*>>
     fun init()
     fun lock()
     fun reset()
     fun unlock() {
-        pool.unlock(this);
+        pool.unlock(this)
+        actionContainers.forEach { it.remove(this) }
     }
 }
 
-abstract class AbstractPool<T : Poolable> {
+abstract class AbstractPool<T : Poolable>() {
     abstract fun lock(): T
     internal abstract fun unlock(obj: Any)
     operator fun invoke(): T {
@@ -47,9 +51,11 @@ open class PoolConfiguration<T : Poolable> : AbstractPoolConfiguration<T> {
                 v.lock()
                 return v
             } else {
-                val v = stack.pop()
-                v.lock()
-                return v
+                synchronized(stack) {
+                    val v = stack.pop()
+                    v.lock()
+                    return v
+                }
             }
         }
 

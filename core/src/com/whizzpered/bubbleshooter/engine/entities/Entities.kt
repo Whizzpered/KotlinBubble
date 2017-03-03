@@ -1,6 +1,8 @@
 package com.whizzpered.bubbleshooter.engine.entities
 
 import com.whizzpered.bubbleshooter.engine.graphics.MutablePoint
+import com.whizzpered.bubbleshooter.engine.handler.AbstractGame
+import com.whizzpered.bubbleshooter.engine.handler.EMPTY_GAME
 import com.whizzpered.bubbleshooter.engine.memory.*
 import java.lang.reflect.Modifier
 
@@ -22,7 +24,7 @@ object EMPTY_ENTITY : Entity() {
     override fun getPoolConfigurator(): AbstractPoolConfiguration<EMPTY_ENTITY> {
         return EMPTY_ENTITY_POOL_CONFIG
     }
-
+    override val actionContainers = mutableListOf<ActionContainer<*>>()
     val EMPTY_STATEMENT = createStatement(0f)
     val EMPTY_RELATED_VARIABLE = EMPTY_STATEMENT % 0
     val EMPTY_RELATED_OBJECT = object : RelatedObject(this) {
@@ -49,13 +51,15 @@ abstract class Entity : Poolable {
     val position = MutablePoint(0f, 0f)
     val velocity = MutablePoint(0f, 0f)
     val acceleration = MutablePoint(0f, 0f)
-    var angle = 0f;
-    var radius = 0f;
+    var angle = 0f
+    var radius = 0f
+    var game: AbstractGame = EMPTY_GAME
     var solid = false
     private val stats: MutableList<Statement> = mutableListOf()
     private val rvars: MutableList<RelatedVariable> = mutableListOf()
     private val objects: MutableList<RelatedObject> = mutableListOf()
     internal val effects = UnpureSet<Effect>(32)
+    override val actionContainers = mutableListOf<ActionContainer<*>>()
     var initialized = false
         private set
 

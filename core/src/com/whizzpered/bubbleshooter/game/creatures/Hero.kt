@@ -3,7 +3,6 @@ package com.whizzpered.bubbleshooter.game.creatures
 import com.badlogic.gdx.math.MathUtils
 import com.whizzpered.bubbleshooter.engine.graphics.Billboard
 import com.whizzpered.bubbleshooter.engine.graphics.Model
-import com.whizzpered.bubbleshooter.engine.graphics.Point
 import com.whizzpered.bubbleshooter.engine.handler.Input
 import com.whizzpered.bubbleshooter.engine.handler.Key
 import com.whizzpered.bubbleshooter.engine.handler.Platform
@@ -14,6 +13,7 @@ import com.whizzpered.bubbleshooter.engine.memory.Poolable
 import com.whizzpered.bubbleshooter.game.Game
 import com.whizzpered.bubbleshooter.utils.cos
 import com.whizzpered.bubbleshooter.utils.sin
+import java.lang.Math.abs
 
 private val model = Model {
     it += Billboard("hero/body", 1f, 1.2f, 0f, 0f, .6f)
@@ -57,16 +57,14 @@ class Hero : Creature {
 
         Input.touch.forEach {
             val t = it
-            it.releasedActions.add {
-                if (t.pressedTime < 0.25f) {
+            it.releasedActions.add(this) {
+                if (t.pressedTime < 0.25f && abs(t.x - t.bx) < 10 && abs(t.y - t.by) < 10) {
                     val v = Game.context new Bubble.config
                     val target = Game.project(t.x.toFloat(), t.y.toFloat())
                     val sangle = MathUtils.atan2(target.y - position.y, target.x - position.x)
                     v.position.set(position.x, position.y)
                     v.velocity.set(MathUtils.cos(sangle), MathUtils.sin(sangle))
-                    Game.context += v
-                } else {
-
+                    (game as Game).context += v
                 }
             }
         }
@@ -79,13 +77,13 @@ class Hero : Creature {
         var y = 0f
         var power = 1f
         if (Platform.desktop) {
-            if (Input.keyboard.isKeyDown(Key.W, Key.UP))
+            if (Input.keyboard[Key.W, Key.UP])
                 y += 1f
-            if (Input.keyboard.isKeyDown(Key.S, Key.DOWN))
+            if (Input.keyboard[Key.S, Key.DOWN])
                 y -= 1f
-            if (Input.keyboard.isKeyDown(Key.D, Key.RIGHT))
+            if (Input.keyboard[Key.D, Key.RIGHT])
                 x += 1f
-            if (Input.keyboard.isKeyDown(Key.A, Key.LEFT))
+            if (Input.keyboard[Key.A, Key.LEFT])
                 x -= 1f
         } else {
             val m = Input.mouse
@@ -105,7 +103,7 @@ class Hero : Creature {
         val c = Game.camera
 
         val p1 = 30
-        val p2 = 100
+        val p2 = 50
 
         c.x = (c.x * (p1 - delta * p2) + (position.x + velocity.x) * delta * p2) / p1
         c.y = (c.y * (p1 - delta * p2) + (position.y + velocity.y) * delta * p2) / p1

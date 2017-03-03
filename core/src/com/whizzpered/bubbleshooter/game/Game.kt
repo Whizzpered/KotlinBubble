@@ -1,33 +1,32 @@
 package com.whizzpered.bubbleshooter.game
 
 import com.whizzpered.bubbleshooter.engine.entities.Entity
-import com.whizzpered.bubbleshooter.engine.graphics.MutablePoint
-import com.whizzpered.bubbleshooter.engine.graphics.Point
-import com.whizzpered.bubbleshooter.engine.handler.Main
+import com.whizzpered.bubbleshooter.engine.handler.AbstractGame
 import com.whizzpered.bubbleshooter.engine.memory.Context
+import com.whizzpered.bubbleshooter.engine.memory.makeListFrom
+import com.whizzpered.bubbleshooter.engine.terrain.Terrain
+import com.whizzpered.bubbleshooter.engine.terrain.Tile
 import com.whizzpered.bubbleshooter.game.creatures.Enemy
 import com.whizzpered.bubbleshooter.game.creatures.Hero
-import java.util.*
 
-object Game {
-    val random = Random()
-    val context = Context<Entity>(100)
+object Game : AbstractGame() {
+    val context = Context<Entity>(100,
+            handleAdding = {
+                it.game = this
+            },
+            handleRemoving = {
+
+            }
+    )
+
     internal val renderBuffer = context.sorted {
         a, b ->
         -(a as Entity).position.y.compareTo((b as Entity).position.y)
     }
-    val camera = MutablePoint(0f, 0f)
-    val height = 6f
+    val allTiles = makeListFrom<Tile, Tiles>(Tiles.values()) { it.tile }
+    val terrain: Terrain = Terrain(64, 64, this, allTiles)
 
-    fun project(screenX: Float, screenY: Float): Point {
-        val sx = (screenX - Main.width / 2).toFloat() /
-                (Main.width.toFloat() / Main.camera!!.viewportWidth!!.toFloat())
-        val sy = (Main.height / 2 - screenY).toFloat() /
-                (Main.height.toFloat() / Main.camera!!.viewportHeight!!.toFloat())
-        return Point(sx + camera.x, sy + camera.y)
-    }
-
-    fun init() {
+    override fun init() {
         for (i in 0..50) {
             val enemy = context new Enemy.config
             enemy.position.set(
@@ -41,17 +40,19 @@ object Game {
             context += enemy
         }
         context += context new Hero.config
+        Tiles.values()
     }
 
-    fun act(delta: Float) {
+    override fun act(delta: Float) {
         context.forEach { it.act(delta) }
     }
 
-    fun render(delta: Float) {
+    override fun render(delta: Float) {
+        terrain.render()
         renderBuffer.forEach { it.render(delta) }
     }
 
-    fun ai(delta: Float) {
+    override fun ai(delta: Float) {
         context.forEach { it.ai(delta) }
     }
 }
