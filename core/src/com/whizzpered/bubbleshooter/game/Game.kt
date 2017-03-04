@@ -41,6 +41,7 @@ object Game : AbstractGame() {
         }
         context += context new Hero.config
         Tiles.values()
+        makeGUI()
     }
 
     override fun act(delta: Float) {

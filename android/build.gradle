@@ -53,7 +53,7 @@ task copyAndroidNatives() {
     }
 }
 
-task run(type: Exec) {
+task androidRun(type: Exec) {
     def path
     def localProperties = project.file("../local.properties")
     if (localProperties.exists()) {
