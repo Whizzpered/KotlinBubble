@@ -55,11 +55,11 @@ object emptyShape : Shape() {
 
 class Billboard : Shape {
     val texture: String
-    var libgdxsprite: Sprite? = null
+    private var libgdxsprite: Sprite? = null
     var width: Float
     var height: Float
 
-    var tryed = false
+    private var tryed = false
 
     constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f) : super() {
         this.texture = texture

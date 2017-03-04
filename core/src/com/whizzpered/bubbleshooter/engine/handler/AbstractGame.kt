@@ -1,17 +1,21 @@
 package com.whizzpered.bubbleshooter.engine.handler
 
-import com.whizzpered.bubbleshooter.engine.entities.Entity
 import com.whizzpered.bubbleshooter.engine.graphics.MutablePoint
 import com.whizzpered.bubbleshooter.engine.graphics.Point
-import com.whizzpered.bubbleshooter.engine.memory.Context
+import com.whizzpered.bubbleshooter.engine.gui.*
 import com.whizzpered.bubbleshooter.game.Game
-import com.whizzpered.bubbleshooter.game.creatures.Enemy
-import com.whizzpered.bubbleshooter.game.creatures.Hero
 import java.util.*
 
 abstract class AbstractGame {
     val random = Random()
     val camera = MutablePoint(0f, 0f)
+    val gui = Container(
+            Position(Coordinate.AT_CENTER, Coordinate.AT_CENTER),
+            Size(
+                    width = { Main.viewportWidth }.toLength(),
+                    height = { Main.viewportHeight }.toLength()
+            )
+    )
     var height = 6f
     abstract fun init()
     abstract fun act(delta: Float)

@@ -44,6 +44,7 @@ object Main : ApplicationAdapter() {
 
     var camera: OrthographicCamera? = null
         private set
+    private var guicamera: OrthographicCamera? = null
 
     internal var renderThread: Thread? = null
     val proc = Runtime.getRuntime().availableProcessors()
@@ -65,6 +66,25 @@ object Main : ApplicationAdapter() {
     var height = 600
         internal set
 
+    var viewportWidth = 0f
+        get() {
+            val c = camera
+            if (c != null)
+                return c.viewportWidth
+            else
+                return 0f
+        }
+        private set
+    var viewportHeight = 0f
+        get() {
+            val c = camera
+            if (c != null)
+                return c.viewportHeight
+            else
+                return 0f
+        }
+        private set
+
     internal var paused = false
     internal var dispose = false
     internal var atlas: TextureAtlas? = null
@@ -82,6 +102,7 @@ object Main : ApplicationAdapter() {
         Game.init()
         atlas = TextureAtlas(Gdx.files.internal("pack.atlas"))
         camera = OrthographicCamera(16f, 12f)
+        guicamera = OrthographicCamera(16f, 12f)
         resume()
 
     }
@@ -93,6 +114,7 @@ object Main : ApplicationAdapter() {
 
     val renderDelta = Delta()
     override fun render() {
+        println("Viewport: $viewportWidth:$viewportHeight")
         if (!paused || Platform.desktop) {
             if (Gdx.graphics.width > Gdx.graphics.height) {
                 camera?.viewportWidth = width.toFloat() / (height.toFloat() / Game.height)
@@ -115,8 +137,18 @@ object Main : ApplicationAdapter() {
             Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT or
                     if (Gdx.graphics.bufferFormat.coverageSampling) GL20.GL_COVERAGE_BUFFER_BIT_NV else 0)
-            Game.render(renderDelta())
+            val delta = renderDelta()
+            Game.render(delta)
             batch?.end()
+            guicamera?.lookAt(0f, 0f, 0f)
+            guicamera?.viewportWidth = camera?.viewportWidth
+            guicamera?.viewportHeight = camera?.viewportHeight
+            guicamera?.update()
+            batch?.projectionMatrix = guicamera?.combined
+            batch?.begin()
+            Game.gui.render(delta)
+            batch?.end()
+
         }
         if (Input.keyboard[Key.MAC_COMMAND + Key.W])
             Gdx.app.exit()

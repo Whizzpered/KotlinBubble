@@ -9,6 +9,10 @@ class ActionContainer<T> {
         }
     }
 
+    operator fun plusAssign(action: (T) -> Unit) {
+        add(action)
+    }
+
     fun add(bind: Poolable, action: (T) -> Unit) {
         synchronized(l) {
             l += Pair(bind, action)

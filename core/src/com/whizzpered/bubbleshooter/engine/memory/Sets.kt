@@ -1,5 +1,6 @@
 package com.whizzpered.bubbleshooter.engine.memory
 
+import com.whizzpered.bubbleshooter.engine.gui.Widget
 import java.util.*
 
 class UnpureSet<T>(val length: Int) {
@@ -33,6 +34,17 @@ class UnpureSet<T>(val length: Int) {
     operator fun minusAssign(t: T) {
         remove(t)
     }
+
+    fun contains(t: T): Boolean {
+        var i = 0
+        do {
+            if (content[i] == t) {
+                return true
+            }
+        } while (++i < range)
+        return false
+    }
+
 
     fun remove(t: T): Boolean {
         var i = 0
