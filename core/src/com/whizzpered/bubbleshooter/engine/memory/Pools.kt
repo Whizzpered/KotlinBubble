@@ -1,7 +1,5 @@
 package com.whizzpered.bubbleshooter.engine.memory
 
-import java.io.Serializable
-
 interface Poolable {
     fun getPoolConfigurator(): AbstractPoolConfiguration<out Poolable>
     val pool: AbstractPool<out Poolable>
@@ -62,7 +60,7 @@ open class PoolConfiguration<T : Poolable> : AbstractPoolConfiguration<T> {
         override fun unlock(obj: Any) {
             try {
                 if (stack.size < parent.limit)
-                stack.push(obj as T)
+                    stack.push(obj as T)
                 (obj as T).reset()
             } catch (e: ClassCastException) {
 

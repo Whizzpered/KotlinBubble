@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.MathUtils
 import com.whizzpered.bubbleshooter.engine.handler.Main
-import com.whizzpered.bubbleshooter.utils.cos
 import com.whizzpered.bubbleshooter.utils.sin
 import java.util.*
 

@@ -2,7 +2,6 @@ package com.whizzpered.bubbleshooter.engine.gui
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.whizzpered.bubbleshooter.engine.handler.Main
-import com.whizzpered.bubbleshooter.utils.sin
 
 class Picture(val texture: String, position: Position, size: Size) : Widget(position, size) {
     private var libgdxsprite: Sprite? = null
@@ -23,7 +22,7 @@ class Picture(val texture: String, position: Position, size: Size) : Widget(posi
             val w = currentWidth
             val h = currentHeight
 
-            v.setPosition(x - w/2, y - h/2)
+            v.setPosition(x - w / 2, y - h / 2)
             v.setSize(w, h)
             v.draw(Main.batch)
         }

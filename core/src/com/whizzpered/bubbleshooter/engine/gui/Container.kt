@@ -31,8 +31,6 @@ class Container(position: Position, size: Size) : AbstractContainer(position, si
     override fun render(delta: Float) {
         widgets.forEach {
             it.render(delta)
-            println("${it.currentX}:${it.currentY}")
-            println("${it.currentWidth}:${it.currentHeight}")
         }
     }
 

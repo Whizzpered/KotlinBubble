@@ -100,7 +100,6 @@ object Main : ApplicationAdapter() {
     override fun create() {
         batch = SpriteBatch()
         Game.init()
-        atlas = TextureAtlas(Gdx.files.internal("pack.atlas"))
         camera = OrthographicCamera(16f, 12f)
         guicamera = OrthographicCamera(16f, 12f)
         resume()
@@ -114,7 +113,6 @@ object Main : ApplicationAdapter() {
 
     val renderDelta = Delta()
     override fun render() {
-        println("Viewport: $viewportWidth:$viewportHeight")
         if (!paused || Platform.desktop) {
             if (Gdx.graphics.width > Gdx.graphics.height) {
                 camera?.viewportWidth = width.toFloat() / (height.toFloat() / Game.height)

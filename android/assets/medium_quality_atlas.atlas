@@ -1,0 +1,117 @@
+
+medium_quality_atlas.png
+size: 1024,1024
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+enemy
+  rotate: false
+  xy: 385, 36
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+enemy__left_eye
+  rotate: false
+  xy: 859, 40
+  size: 76, 73
+  orig: 76, 73
+  offset: 0, 0
+  index: -1
+enemy__right_eye
+  rotate: false
+  xy: 2, 2
+  size: 65, 64
+  orig: 65, 64
+  offset: 0, 0
+  index: -1
+hero
+  rotate: false
+  xy: 711, 670
+  size: 250, 350
+  orig: 250, 350
+  offset: 0, 0
+  index: -1
+hero__body
+  rotate: false
+  xy: 643, 115
+  size: 220, 295
+  orig: 220, 295
+  offset: 0, 0
+  index: -1
+hero__cap
+  rotate: false
+  xy: 637, 25
+  size: 139, 88
+  orig: 139, 88
+  offset: 0, 0
+  index: -1
+hero__eye
+  rotate: false
+  xy: 937, 341
+  size: 72, 69
+  orig: 72, 69
+  offset: 0, 0
+  index: -1
+hero__month
+  rotate: false
+  xy: 69, 39
+  size: 42, 27
+  orig: 42, 27
+  offset: 0, 0
+  index: -1
+hero__pompon
+  rotate: false
+  xy: 778, 33
+  size: 79, 80
+  orig: 79, 80
+  offset: 0, 0
+  index: -1
+objects__appletree
+  rotate: false
+  xy: 2, 545
+  size: 381, 475
+  orig: 381, 475
+  offset: 0, 0
+  index: -1
+objects__oak
+  rotate: false
+  xy: 2, 68
+  size: 381, 475
+  orig: 381, 475
+  offset: 0, 0
+  index: -1
+objects__pine
+  rotate: false
+  xy: 385, 546
+  size: 324, 474
+  orig: 324, 474
+  offset: 0, 0
+  index: -1
+terrain__grass
+  rotate: false
+  xy: 711, 412
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+terrain__other_grass
+  rotate: false
+  xy: 385, 288
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+
+medium_quality_atlas2.png
+size: 256,256
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+enemy__body
+  rotate: false
+  xy: 2, 2
+  size: 232, 234
+  orig: 232, 234
+  offset: 0, 0
+  index: -1

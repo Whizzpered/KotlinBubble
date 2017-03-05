@@ -6,7 +6,6 @@ import com.whizzpered.bubbleshooter.engine.memory.AbstractPool
 import com.whizzpered.bubbleshooter.engine.memory.AbstractPoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.PoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.Poolable
-import com.whizzpered.bubbleshooter.game.Game
 import com.whizzpered.bubbleshooter.utils.atan2
 import com.whizzpered.bubbleshooter.utils.cos
 import com.whizzpered.bubbleshooter.utils.dist
