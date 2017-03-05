@@ -85,7 +85,8 @@ class AtlasProcessor {
         list.forEach {
             try {
                 if (it.type == "svg") {
-                    val svg_URI_input = normalizePath(it.file.absolutePath)
+                    val svg_URI_input = Paths.get(normalizePath(it.file.absolutePath)).toUri().toURL().toString()
+                    println(svg_URI_input)
                     val input_svg_image = TranscoderInput(svg_URI_input)
                     val png_ostream = FileOutputStream(normalizePath("../../ToAtlas/Sprites/${it.path}.png"))
                     val output_png_image = TranscoderOutput(png_ostream)
@@ -96,6 +97,7 @@ class AtlasProcessor {
                 }
 
                 var i = ImageIO.read(File(normalizePath("../../ToAtlas/Sprites/${it.path}.png")))
+                println(normalizePath("../../ToAtlas/Sprites/${it.path}.png"))
                 val b = BufferedImage(
                         (i.width * scale).toInt(),
                         (i.height * scale).toInt(),
@@ -111,7 +113,7 @@ class AtlasProcessor {
                 val f = File(normalizePath("../../ToAtlas/Generated/$name/${it.path.replace("/", "__")}.png"))
                 ImageIO.write(b, "png", f)
                 if (it.type == "svg")
-                    File(normalizePath("../../ToAtlas/Generated/$name/${it.path}.png")).delete()
+                    File(normalizePath("../../ToAtlas/Sprites/${it.path}.png")).delete()
 
             } catch (e: Exception) {
                 e.printStackTrace()

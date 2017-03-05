@@ -1,0 +1,154 @@
+
+high_quality_atlas.png
+size: 1024,1024
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+enemy__left_eye
+  rotate: false
+  xy: 766, 701
+  size: 152, 146
+  orig: 152, 146
+  offset: 0, 0
+  index: -1
+enemy__right_eye
+  rotate: false
+  xy: 766, 430
+  size: 131, 128
+  orig: 131, 128
+  offset: 0, 0
+  index: -1
+hero__eye
+  rotate: false
+  xy: 766, 560
+  size: 145, 139
+  orig: 145, 139
+  offset: 0, 0
+  index: -1
+hero__month
+  rotate: false
+  xy: 2, 2
+  size: 85, 54
+  orig: 85, 54
+  offset: 0, 0
+  index: -1
+hero__pompon
+  rotate: false
+  xy: 766, 849
+  size: 158, 160
+  orig: 158, 160
+  offset: 0, 0
+  index: -1
+objects__appletree
+  rotate: false
+  xy: 2, 58
+  size: 762, 951
+  orig: 762, 951
+  offset: 0, 0
+  index: -1
+
+high_quality_atlas2.png
+size: 1024,1024
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+enemy
+  rotate: false
+  xy: 2, 14
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+enemy__body
+  rotate: false
+  xy: 282, 516
+  size: 465, 469
+  orig: 465, 469
+  offset: 0, 0
+  index: -1
+hero__cap
+  rotate: false
+  xy: 2, 808
+  size: 278, 177
+  orig: 278, 177
+  offset: 0, 0
+  index: -1
+terrain__grass
+  rotate: false
+  xy: 504, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+
+high_quality_atlas3.png
+size: 1024,1024
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+objects__oak
+  rotate: false
+  xy: 2, 2
+  size: 762, 951
+  orig: 762, 951
+  offset: 0, 0
+  index: -1
+
+high_quality_atlas4.png
+size: 1024,1024
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+objects__pine
+  rotate: false
+  xy: 2, 2
+  size: 649, 948
+  orig: 649, 948
+  offset: 0, 0
+  index: -1
+
+high_quality_atlas5.png
+size: 1024,1024
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+pine
+  rotate: false
+  xy: 2, 2
+  size: 649, 948
+  orig: 649, 948
+  offset: 0, 0
+  index: -1
+
+high_quality_atlas6.png
+size: 1024,1024
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+hero
+  rotate: false
+  xy: 2, 2
+  size: 500, 700
+  orig: 500, 700
+  offset: 0, 0
+  index: -1
+terrain__other_grass
+  rotate: false
+  xy: 504, 190
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+
+high_quality_atlas7.png
+size: 512,1024
+format: RGBA8888
+filter: MipMap,Linear
+repeat: none
+hero__body
+  rotate: false
+  xy: 2, 2
+  size: 441, 590
+  orig: 441, 590
+  offset: 0, 0
+  index: -1

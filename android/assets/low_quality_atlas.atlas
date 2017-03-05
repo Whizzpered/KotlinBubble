@@ -6,56 +6,56 @@ filter: Nearest,Nearest
 repeat: none
 enemy
   rotate: false
-  xy: 730, 368
+  xy: 745, 368
   size: 125, 125
   orig: 125, 125
   offset: 0, 0
   index: -1
 enemy__body
   rotate: false
-  xy: 857, 376
+  xy: 872, 376
   size: 116, 117
   orig: 116, 117
   offset: 0, 0
   index: -1
 enemy__left_eye
   rotate: false
-  xy: 975, 457
+  xy: 358, 85
   size: 38, 36
   orig: 38, 36
   offset: 0, 0
   index: -1
 enemy__right_eye
   rotate: false
-  xy: 321, 222
+  xy: 990, 461
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 hero
   rotate: false
-  xy: 194, 79
+  xy: 358, 318
   size: 125, 175
   orig: 125, 175
   offset: 0, 0
   index: -1
 hero__body
   rotate: false
-  xy: 358, 346
+  xy: 358, 169
   size: 110, 147
   orig: 110, 147
   offset: 0, 0
   index: -1
 hero__cap
   rotate: false
-  xy: 194, 33
+  xy: 358, 123
   size: 69, 44
   orig: 69, 44
   offset: 0, 0
   index: -1
 hero__eye
   rotate: false
-  xy: 265, 43
+  xy: 429, 133
   size: 36, 34
   orig: 36, 34
   offset: 0, 0
@@ -69,7 +69,7 @@ hero__month
   index: -1
 hero__pompon
   rotate: false
-  xy: 358, 304
+  xy: 485, 323
   size: 39, 40
   orig: 39, 40
   offset: 0, 0
@@ -95,16 +95,23 @@ objects__pine
   orig: 162, 237
   offset: 0, 0
   index: -1
+pine
+  rotate: false
+  xy: 194, 17
+  size: 162, 237
+  orig: 162, 237
+  offset: 0, 0
+  index: -1
 terrain__grass
   rotate: false
-  xy: 470, 365
+  xy: 485, 365
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 terrain__other_grass
   rotate: false
-  xy: 600, 365
+  xy: 615, 365
   size: 128, 128
   orig: 128, 128
   offset: 0, 0

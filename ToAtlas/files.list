@@ -1,0 +1,20 @@
+enemy	1488555109000
+enemy/body	1488555109000
+enemy/left_eye	1488555109000
+enemy/right_eye	1488555109000
+hero	1488555109000
+hero/body	1488555109000
+hero/cap	1488555109000
+hero/eye	1488555109000
+hero/month	1488555109000
+hero/pompon	1488555109000
+objects/appletree	1488705436000
+objects/oak	1488704623000
+objects/pine	1488704073000
+pine	1488723905000
+pine	1488723981000
+terrain/grass	1488555109000
+terrain/other_grass	1488555109000
+HIGH	high_quality_atlas	1.0	true
+MEDIUM	medium_quality_atlas	0.5	true
+LOW	low_quality_atlas	0.25	false
