@@ -17,4 +17,4 @@ terrain/other_grass	1488555109000
 HIGH	high_quality_atlas	1.0	true
 MEDIUM	medium_quality_atlas	0.5	true
 LOW	low_quality_atlas	0.25	false
-CALCULATOR	calculator_quality_atlas	0.125	false
+POTATO	potato_quality_atlas	0.125	false

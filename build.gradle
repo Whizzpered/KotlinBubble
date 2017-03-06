@@ -82,39 +82,45 @@ project(":core") {
     }
 }
 
-project(":ios-moe") {
-    apply plugin: "moe"
+import org.gradle.internal.os.OperatingSystem
 
-    configurations { natives }
+if (OperatingSystem.current().isMacOsX()) {
+    project(":ios-moe") {
+        apply plugin: "moe"
 
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
+        configurations { natives }
+
+        dependencies {
+            compile project(":core")
+            compile "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
+        }
     }
 }
 
-project(":android") {
-    apply plugin: "android"
-    apply plugin: 'kotlin-android'
+if (!OperatingSystem.current().isMacOsX() || file("/Volumes/Time Machine Backups/Steam/Android/sdk").exists()) {
+    project(":android") {
+        apply plugin: "android"
+        apply plugin: 'kotlin-android'
 
-    configurations { natives }
+        configurations { natives }
 
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
+        dependencies {
+            compile project(":core")
+            compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
+            natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+            compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi"
+            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
+            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-arm64-v8a"
+            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
+            natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86_64"
+        }
     }
 }
 

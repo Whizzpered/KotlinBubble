@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.whizzpered.bubbleshooter.engine.handler.Main
+import com.whizzpered.bubbleshooter.engine.memory.makeListFrom
 import kotlin.concurrent.thread
+import java.util.concurrent.ConcurrentLinkedQueue
 
 class Sprite internal constructor(val atlas: Atlas, val texture: String, var color: Color) {
     var x = 0f
@@ -54,12 +56,31 @@ class Sprite internal constructor(val atlas: Atlas, val texture: String, var col
 }
 
 class Atlas {
-
     enum class Quality(val scale: Float, val antialiasing: Boolean = true) {
         HIGH(1f),
         MEDIUM(.5f),
-        LOW(.25f, false),
-        CALCULATOR(.125f, false);
+        LOW(.25f, antialiasing = false),
+        POTATO(.125f, antialiasing = false);
+
+        operator fun inc(): Quality {
+            val i = Sorter.sortedQualities.indexOf(this)
+            if (i < Sorter.sortedQualities.size - 1)
+                return Sorter.sortedQualities[i + 1]
+            else
+                return this
+        }
+
+        operator fun dec(): Quality {
+            val i = Sorter.sortedQualities.indexOf(this)
+            if (i > 0)
+                return Sorter.sortedQualities[i - 1]
+            else
+                return this
+        }
+
+        private companion object Sorter {
+            private val sortedQualities = makeListFrom(Quality.values(), {it}).sortedBy{it.scale}
+        }
 
         val atlasPath = this.name.toLowerCase() + "_quality_atlas"
     }
@@ -67,6 +88,7 @@ class Atlas {
     private var actualQuality = Quality.values().maxBy { it.scale } ?: Quality.values()[0]
 
     internal @Volatile var handler: AtlasHandler = AtlasHandler(quality)
+    private val queue = ConcurrentLinkedQueue<AtlasHandler>()
 
     internal class AtlasHandler(val quality: Quality) {
         val atlas: TextureAtlas
@@ -91,9 +113,17 @@ class Atlas {
             thread {
                 val h = handler
                 handler = AtlasHandler(q)
-                h.atlas.dispose()
+                queue.add(h)
             }
         }
+    }
+
+    fun render(delta: Float) {
+        do {
+            val v = queue.poll()
+            if (v != null)
+                v.atlas.dispose()
+        } while(v != null)
     }
 
     fun createSprite(texture: String, color: Color = Color.WHITE): Sprite = Sprite(this, texture, color)

@@ -234,6 +234,7 @@
 					58C6F5231DA66CB600309CB6 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = TABXA7XW3T;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -499,6 +500,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5817739D1E37A10D004E28A9 /* custom.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = TABXA7XW3T;
 				ENABLE_BITCODE = NO;
@@ -536,6 +538,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5817739D1E37A10D004E28A9 /* custom.xcconfig */;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = TABXA7XW3T;
 				ENABLE_BITCODE = NO;
