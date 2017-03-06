@@ -24,6 +24,7 @@ object EMPTY_ENTITY : Entity() {
     override fun getPoolConfigurator(): AbstractPoolConfiguration<EMPTY_ENTITY> {
         return EMPTY_ENTITY_POOL_CONFIG
     }
+
     override val actionContainers = mutableListOf<ActionContainer<*>>()
     val EMPTY_STATEMENT = createStatement(0f)
     val EMPTY_RELATED_VARIABLE = EMPTY_STATEMENT % 0

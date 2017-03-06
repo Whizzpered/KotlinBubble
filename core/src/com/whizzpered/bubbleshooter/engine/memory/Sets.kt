@@ -1,6 +1,5 @@
 package com.whizzpered.bubbleshooter.engine.memory
 
-import com.whizzpered.bubbleshooter.engine.gui.Widget
 import java.util.*
 
 class UnpureSet<T>(val length: Int) {

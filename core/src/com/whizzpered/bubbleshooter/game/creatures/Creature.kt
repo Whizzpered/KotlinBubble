@@ -1,7 +1,6 @@
 package com.whizzpered.bubbleshooter.game.creatures
 
 import com.whizzpered.bubbleshooter.engine.entities.Entity
-import com.whizzpered.bubbleshooter.utils.*
 
 abstract class Creature : Entity() {
 

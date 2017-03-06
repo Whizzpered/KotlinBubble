@@ -18,10 +18,10 @@ import java.lang.Math.abs
 private val model = Model {
     it += Billboard("hero/body", 1f, 1.2f, 0f, 0f, .6f)
     it += Billboard("hero/month", .1f, .1f, .3f, 0f, .6f)
-    var eye1 = Billboard("hero/eye", .15f, .3f, .3f, .2f, .75f)
+    var eye1 = Billboard("hero/eye", .15f, .3f, .15f, .1f, .75f)
     eye1.deformation = -1f
     it += eye1
-    var eye2 = Billboard("hero/eye", .15f, .3f, .3f, -.2f, .75f)
+    var eye2 = Billboard("hero/eye", .15f, .3f, .15f, -.1f, .75f)
     eye2.deformation = -1f
     it += eye2
     var cap = Billboard("hero/cap", .6f, .5f, -.2f, 0f, .95f)

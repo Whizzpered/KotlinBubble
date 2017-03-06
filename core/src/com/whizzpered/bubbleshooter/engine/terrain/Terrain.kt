@@ -1,6 +1,5 @@
 package com.whizzpered.bubbleshooter.engine.terrain
 
-import com.badlogic.gdx.Gdx
 import com.whizzpered.bubbleshooter.engine.handler.AbstractGame
 import com.whizzpered.bubbleshooter.engine.handler.Main
 import com.whizzpered.bubbleshooter.game.Game
@@ -33,20 +32,6 @@ private fun generate(it: Terrain) {
         cx = it.correct(cx, it.width); cy = it.correct(cy, it.height)
         f[cx][cy] = 500 + r.nextInt(1000);
     }
-
-    /*
-    for (x in 0..it.width - 1)
-        for (i in 0..0) {
-            f[x][i] = -r.nextInt(500)
-            f[x][it.height - 1 - i] = -r.nextInt(500)
-        }
-
-    for (y in 0..it.height - 1)
-        for (i in 0..0) {
-            f[i][y] = -r.nextInt(500)
-            f[it.width - 1 - i][y] = -r.nextInt(500)
-        }
-    */
 
     for (i in 0..3) {
         for (x in 0..it.width - 1)
