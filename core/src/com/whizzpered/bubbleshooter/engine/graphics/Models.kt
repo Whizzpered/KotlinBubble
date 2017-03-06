@@ -1,7 +1,6 @@
 package com.whizzpered.bubbleshooter.engine.graphics
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.MathUtils
 import com.whizzpered.bubbleshooter.engine.handler.Main
 import com.whizzpered.bubbleshooter.utils.sin
@@ -54,7 +53,7 @@ object emptyShape : Shape() {
 
 class Billboard : Shape {
     val texture: String
-    private var libgdxsprite: Sprite? = null
+    private val sprite: Sprite
     var width: Float
     var height: Float
 
@@ -64,18 +63,21 @@ class Billboard : Shape {
         this.texture = texture
         this.width = width
         this.height = height
+        sprite = Main.atlas.createSprite(texture)
     }
 
     constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f, p: Point3D) : super(p) {
         this.texture = texture
         this.width = width
         this.height = height
+        sprite = Main.atlas.createSprite(texture)
     }
 
     constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f, p: MutablePoint3D) : super(p) {
         this.texture = texture
         this.width = width
         this.height = height
+        sprite = Main.atlas.createSprite(texture)
     }
 
     constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f,
@@ -83,26 +85,16 @@ class Billboard : Shape {
         this.texture = texture
         this.width = width
         this.height = height
+        sprite = Main.atlas.createSprite(texture)
     }
 
     override fun render(x: Float, y: Float, z: Float, angle: Float) {
-        if (!Main.isRenderThread())
-            return
-
-        if (!tryed) {
-            tryed = true
-            libgdxsprite = Main.createSprite(texture)
-        }
-        val v = libgdxsprite
-        if (v != null) {
-            val p = project(angle)
-            v.x = x + p.x - width / 2 * (1 + deformation * sin(angle))
-            v.y = z + y + p.y - height / 2
-            v.setSize(width * (1 + deformation * sin(angle)), height)
-            v.draw(Main.batch)
-        }
+        val p = project(angle)
+        sprite.x = x + p.x * (1 + deformation * sin(angle))
+        sprite.y = z + y + p.y
+        sprite.setSize(width * (1 + deformation * sin(angle)), height)
+        sprite.render()
     }
-
 }
 
 class Circle : Shape {

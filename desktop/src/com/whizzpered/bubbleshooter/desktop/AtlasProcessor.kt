@@ -123,6 +123,10 @@ class AtlasProcessor {
         if (antialiasing) {
             settings.filterMag = Texture.TextureFilter.Linear
             settings.filterMin = Texture.TextureFilter.MipMap
+            settings.duplicatePadding = true
+        } else {
+            settings.paddingX = 0
+            settings.paddingY = 0
         }
         TexturePacker.process(
                 settings,
@@ -130,6 +134,7 @@ class AtlasProcessor {
                 normalizePath("../assets"),
                 "$name"
         )
+        delete(dir)
     }
 
     private fun readListFromFile(file: File): String {

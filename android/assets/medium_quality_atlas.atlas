@@ -6,91 +6,91 @@ filter: MipMap,Linear
 repeat: none
 enemy__left_eye
   rotate: false
-  xy: 933, 80
+  xy: 932, 81
   size: 76, 73
   orig: 76, 73
   offset: 0, 0
   index: -1
 enemy__right_eye
   rotate: false
-  xy: 2, 3
+  xy: 1, 4
   size: 65, 64
   orig: 65, 64
   offset: 0, 0
   index: -1
 hero
   rotate: false
-  xy: 711, 671
+  xy: 710, 672
   size: 250, 350
   orig: 250, 350
   offset: 0, 0
   index: -1
 hero__cap
   rotate: false
-  xy: 711, 65
+  xy: 710, 66
   size: 139, 88
   orig: 139, 88
   offset: 0, 0
   index: -1
 hero__eye
   rotate: false
-  xy: 852, 2
+  xy: 384, 1
   size: 72, 69
   orig: 72, 69
   offset: 0, 0
   index: -1
 hero__month
   rotate: false
-  xy: 69, 40
+  xy: 68, 41
   size: 42, 27
   orig: 42, 27
   offset: 0, 0
   index: -1
 hero__pompon
   rotate: false
-  xy: 852, 73
+  xy: 851, 74
   size: 79, 80
   orig: 79, 80
   offset: 0, 0
   index: -1
 objects__appletree
   rotate: false
-  xy: 2, 546
+  xy: 1, 547
   size: 381, 475
   orig: 381, 475
   offset: 0, 0
   index: -1
 objects__oak
   rotate: false
-  xy: 2, 69
+  xy: 1, 70
   size: 381, 475
   orig: 381, 475
   offset: 0, 0
   index: -1
 objects__pine
   rotate: false
-  xy: 385, 547
+  xy: 384, 548
   size: 324, 474
   orig: 324, 474
   offset: 0, 0
   index: -1
 pine
   rotate: false
-  xy: 385, 71
+  xy: 384, 72
   size: 324, 474
   orig: 324, 474
   offset: 0, 0
   index: -1
 terrain__grass
   rotate: false
-  xy: 711, 413
+  xy: 710, 414
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 terrain__other_grass
   rotate: false
-  xy: 711, 155
+  xy: 710, 156
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
@@ -103,21 +103,21 @@ filter: MipMap,Linear
 repeat: none
 enemy
   rotate: false
-  xy: 224, 238
+  xy: 223, 237
   size: 250, 250
   orig: 250, 250
   offset: 0, 0
   index: -1
 enemy__body
   rotate: false
-  xy: 224, 2
+  xy: 223, 1
   size: 232, 234
   orig: 232, 234
   offset: 0, 0
   index: -1
 hero__body
   rotate: false
-  xy: 2, 193
+  xy: 1, 192
   size: 220, 295
   orig: 220, 295
   offset: 0, 0

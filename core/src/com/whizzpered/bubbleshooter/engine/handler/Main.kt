@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.whizzpered.bubbleshooter.engine.graphics.Atlas
 import com.whizzpered.bubbleshooter.game.Game
 
 object EMPTY_GAME : AbstractGame() {
@@ -39,6 +40,8 @@ object Main : ApplicationAdapter() {
             return delta / 1000f
         }
     }
+
+    var atlas = Atlas()
 
     var game: AbstractGame = Game
 
@@ -87,7 +90,6 @@ object Main : ApplicationAdapter() {
 
     internal var paused = false
     internal var dispose = false
-    internal var atlas: TextureAtlas? = null
     var batch: SpriteBatch? = null
         internal set
     var img: Texture? = null
@@ -103,12 +105,6 @@ object Main : ApplicationAdapter() {
         camera = OrthographicCamera(16f, 12f)
         guicamera = OrthographicCamera(16f, 12f)
         resume()
-
-    }
-
-    fun createSprite(name: String): Sprite? {
-        val a = atlas
-        return atlas?.createSprite(name)
     }
 
     val renderDelta = Delta()
@@ -146,8 +142,17 @@ object Main : ApplicationAdapter() {
             batch?.begin()
             Game.gui.render(delta)
             batch?.end()
-
         }
+
+        if (Input.keyboard[Key.K])
+            atlas.quality = Atlas.Quality.CALCULATOR
+        if (Input.keyboard[Key.L])
+            atlas.quality = Atlas.Quality.LOW
+        if (Input.keyboard[Key.SEMICOLON])
+            atlas.quality = Atlas.Quality.MEDIUM
+        if (Input.keyboard[Key.APOSTROPHE])
+            atlas.quality = Atlas.Quality.HIGH
+
         if (Input.keyboard[Key.MAC_COMMAND + Key.W])
             Gdx.app.exit()
     }

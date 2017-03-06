@@ -1,7 +1,10 @@
 package com.whizzpered.bubbleshooter.engine.graphics
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.whizzpered.bubbleshooter.engine.handler.Main
+import kotlin.concurrent.thread
 
 class Sprite internal constructor(val atlas: Atlas, val texture: String, var color: Color) {
     var x = 0f
@@ -20,15 +23,18 @@ class Sprite internal constructor(val atlas: Atlas, val texture: String, var col
     }
 
     private var tryed = false
-    private var quality = Atlas.Quality.HIGH
     private var libgdxsprite: com.badlogic.gdx.graphics.g2d.Sprite? = null
+    private var handler: Atlas.AtlasHandler? = null
 
     fun render() {
         if (!Main.isRenderThread())
             return
-        if (!tryed) {
+        if (!tryed || atlas.handler != handler) {
+            handler = atlas.handler
+            val handler = handler
             tryed = true
-            libgdxsprite = Main.createSprite(texture)
+            if (handler != null)
+                libgdxsprite = handler.atlas.createSprite(texture.replace("/", "__"))
         }
         val v = libgdxsprite
         if (v != null) {
@@ -48,13 +54,48 @@ class Sprite internal constructor(val atlas: Atlas, val texture: String, var col
 }
 
 class Atlas {
-    var quality = Quality.HIGH
 
-    enum class Quality(val atlasPath: String, val scale: Float, val antialiasing: Boolean = true) {
-        HIGH("high_quality_atlas", 1f),
-        MEDIUM("medium_quality_atlas", .5f),
-        LOW("low_quality_atlas", .25f, false)
+    enum class Quality(val scale: Float, val antialiasing: Boolean = true) {
+        HIGH(1f),
+        MEDIUM(.5f),
+        LOW(.25f, false),
+        CALCULATOR(.125f, false);
+
+        val atlasPath = this.name.toLowerCase() + "_quality_atlas"
     }
 
-    fun getSrpite(texture: String, color: Color = Color.WHITE) = Sprite(this, texture, color)
+    private var actualQuality = Quality.values().maxBy { it.scale } ?: Quality.values()[0]
+
+    internal @Volatile var handler: AtlasHandler = AtlasHandler(quality)
+
+    internal class AtlasHandler(val quality: Quality) {
+        val atlas: TextureAtlas
+        get() {
+            if (realAtlas == null)
+                realAtlas = TextureAtlas(Gdx.files.internal(quality.atlasPath + ".atlas"))
+            val r = realAtlas
+            return if (r != null) r else
+                throw NullPointerException("Expression 'realAtlas' must not be null")
+        }
+
+        private var realAtlas: TextureAtlas? = null
+    }
+
+    var quality: Quality
+        get() = actualQuality
+        set(value) = update(value)
+
+    private fun update(q: Quality) {
+        if (q != actualQuality) {
+            actualQuality = q
+            thread {
+                val h = handler
+                handler = AtlasHandler(q)
+                h.atlas.dispose()
+            }
+        }
+    }
+
+    fun createSprite(texture: String, color: Color = Color.WHITE): Sprite = Sprite(this, texture, color)
+
 }
