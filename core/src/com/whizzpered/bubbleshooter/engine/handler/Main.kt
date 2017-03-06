@@ -5,9 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.whizzpered.bubbleshooter.engine.graphics.Atlas
 import com.whizzpered.bubbleshooter.game.Game
 
@@ -108,6 +106,10 @@ object Main : ApplicationAdapter() {
     }
 
     val renderDelta = Delta()
+    var lastTime = System.currentTimeMillis()
+    var deltas = renderDelta()
+    var deltaNumber = 1
+
     override fun render() {
         if (!paused || Platform.desktop) {
             if (Gdx.graphics.width > Gdx.graphics.height) {
@@ -132,6 +134,8 @@ object Main : ApplicationAdapter() {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT or
                     if (Gdx.graphics.bufferFormat.coverageSampling) GL20.GL_COVERAGE_BUFFER_BIT_NV else 0)
             val delta = renderDelta()
+            deltas += delta
+            deltaNumber++
             Game.render(delta)
             batch?.end()
             guicamera?.lookAt(0f, 0f, 0f)
@@ -142,19 +146,24 @@ object Main : ApplicationAdapter() {
             batch?.begin()
             Game.gui.render(delta)
             batch?.end()
+            atlas.render(delta)
+            if (Input.keyboard[Key.L])
+                atlas.quality++
+            if (Input.keyboard[Key.K])
+                atlas.quality--
+
+            val currTime = System.currentTimeMillis()
+            if (currTime - lastTime > 1000 * 60 * 1.5) {
+                if (deltas / deltaNumber > 0.06)
+                    atlas.quality--
+                deltas = delta
+                deltaNumber = 1
+                lastTime = currTime
+            }
+
+            if (Input.keyboard[Key.MAC_COMMAND + Key.W])
+                Gdx.app.exit()
         }
-
-        if (Input.keyboard[Key.K])
-            atlas.quality = Atlas.Quality.CALCULATOR
-        if (Input.keyboard[Key.L])
-            atlas.quality = Atlas.Quality.LOW
-        if (Input.keyboard[Key.SEMICOLON])
-            atlas.quality = Atlas.Quality.MEDIUM
-        if (Input.keyboard[Key.APOSTROPHE])
-            atlas.quality = Atlas.Quality.HIGH
-
-        if (Input.keyboard[Key.MAC_COMMAND + Key.W])
-            Gdx.app.exit()
     }
 
     override fun dispose() {

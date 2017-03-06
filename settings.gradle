@@ -1,1 +1,11 @@
-include 'desktop', 'core', 'ios-moe', 'android'
+import org.gradle.internal.os.OperatingSystem
+
+if (OperatingSystem.current().isMacOsX()) {
+    if (file("/Volumes/Time Machine Backups/Steam/Android/sdk").exists()) {
+        include 'desktop', 'core', 'ios-moe', 'android'
+    } else {
+        include 'desktop', 'core', 'ios-moe'
+    }
+} else {
+    include 'desktop', 'core', 'android'
+}
