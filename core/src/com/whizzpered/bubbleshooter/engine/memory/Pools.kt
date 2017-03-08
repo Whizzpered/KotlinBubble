@@ -1,5 +1,7 @@
 package com.whizzpered.bubbleshooter.engine.memory
 
+import java.lang.ref.WeakReference
+
 interface Poolable {
     fun getPoolConfigurator(): AbstractPoolConfiguration<out Poolable>
     val pool: AbstractPool<out Poolable>
@@ -40,19 +42,24 @@ open class PoolConfiguration<T : Poolable> : AbstractPoolConfiguration<T> {
         }
 
     class Pool<T : Poolable> internal constructor(val parent: PoolConfiguration<T>) : AbstractPool<T>() {
-        private val stack = java.util.Stack<T>()
+        private val stack = java.util.Stack<WeakReference<T>>()
 
         override fun lock(): T {
-            if (stack.empty()) {
-                val v = parent.fabricator(this)
-                v.init()
-                v.lock()
-                return v
-            } else {
-                synchronized(stack) {
-                    val v = stack.pop()
+            while (true) {
+                if (stack.empty()) {
+                    val v = parent.fabricator(this)
+                    v.init()
                     v.lock()
                     return v
+                } else {
+                    synchronized(stack) {
+                        val v = stack.pop()
+                        val g = v.get()
+                        if (g != null) {
+                            g.lock()
+                            return g
+                        }
+                    }
                 }
             }
         }
@@ -60,7 +67,7 @@ open class PoolConfiguration<T : Poolable> : AbstractPoolConfiguration<T> {
         override fun unlock(obj: Any) {
             try {
                 if (stack.size < parent.limit)
-                    stack.push(obj as T)
+                    stack.push(WeakReference(obj as T))
                 (obj as T).reset()
             } catch (e: ClassCastException) {
 

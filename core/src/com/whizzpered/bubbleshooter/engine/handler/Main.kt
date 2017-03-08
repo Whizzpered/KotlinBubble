@@ -102,6 +102,13 @@ object Main : ApplicationAdapter() {
         Game.init()
         camera = OrthographicCamera(16f, 12f)
         guicamera = OrthographicCamera(16f, 12f)
+
+        Input.keyboard.keyPressedActions += {
+            if (it == Key.L)
+                atlas.quality++
+            if (it == Key.K)
+                atlas.quality++
+        }
         resume()
     }
 
@@ -147,14 +154,9 @@ object Main : ApplicationAdapter() {
             Game.gui.render(delta)
             batch?.end()
             atlas.render(delta)
-            if (Input.keyboard[Key.L])
-                atlas.quality++
-            if (Input.keyboard[Key.K])
-                atlas.quality--
-
             val currTime = System.currentTimeMillis()
             if (currTime - lastTime > 1000 * 60 * 1.5) {
-                if (deltas / deltaNumber > 0.06)
+                if (deltas / deltaNumber > 1f / 30)
                     atlas.quality--
                 deltas = delta
                 deltaNumber = 1

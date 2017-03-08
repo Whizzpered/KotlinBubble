@@ -63,21 +63,21 @@ class Billboard : Shape {
         this.texture = texture
         this.width = width
         this.height = height
-        sprite = Main.atlas.createSprite(texture)
+        sprite = Main.atlas.getSprite(texture)
     }
 
     constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f, p: Point3D) : super(p) {
         this.texture = texture
         this.width = width
         this.height = height
-        sprite = Main.atlas.createSprite(texture)
+        sprite = Main.atlas.getSprite(texture)
     }
 
     constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f, p: MutablePoint3D) : super(p) {
         this.texture = texture
         this.width = width
         this.height = height
-        sprite = Main.atlas.createSprite(texture)
+        sprite = Main.atlas.getSprite(texture)
     }
 
     constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f,
@@ -85,15 +85,17 @@ class Billboard : Shape {
         this.texture = texture
         this.width = width
         this.height = height
-        sprite = Main.atlas.createSprite(texture)
+        sprite = Main.atlas.getSprite(texture)
     }
 
     override fun render(x: Float, y: Float, z: Float, angle: Float) {
         val p = project(angle)
-        sprite.x = x + p.x * (1 + deformation * sin(angle))
-        sprite.y = z + y + p.y
-        sprite.setSize(width * (1 + deformation * sin(angle)), height)
-        sprite.render()
+        sprite.render {
+            it.x = x + p.x * (1 + deformation * sin(angle))
+            it.y = z + y + p.y
+            it.setSize(width * (1 + deformation * sin(angle)), height)
+            it.angle = 0f
+        }
     }
 }
 
@@ -141,28 +143,28 @@ class Model : Shape {
     }
 
     constructor(initializer: (ModelBuilder) -> Unit) : super() {
-        val m = ModelBuilder()
+        val m = ModelBuilder(this)
         initializer(m)
         m.lock()
         shapes = toArray(m.shapes)
     }
 
     constructor(p: Point3D, initializer: (ModelBuilder) -> Unit) : super(p) {
-        val m = ModelBuilder()
+        val m = ModelBuilder(this)
         initializer(m)
         m.lock()
         shapes = toArray(m.shapes)
     }
 
     constructor(p: MutablePoint3D, initializer: (ModelBuilder) -> Unit) : super(p) {
-        val m = ModelBuilder()
+        val m = ModelBuilder(this)
         initializer(m)
         m.lock()
         shapes = toArray(m.shapes)
     }
 
     constructor(x: Float, y: Float, z: Float, initializer: (ModelBuilder) -> Unit) : super(x, y, z) {
-        val m = ModelBuilder()
+        val m = ModelBuilder(this)
         initializer(m)
         m.lock()
         shapes = toArray(m.shapes)
@@ -195,7 +197,8 @@ class Model : Shape {
         shapes.forEach { it.render(x + p.x, y, z + p.y, tangle) }
     }
 
-    class ModelBuilder {
+    class ModelBuilder internal constructor(val model: Model) {
+
         private var locked = false
         internal val shapes: MutableList<Shape> = mutableListOf()
 
