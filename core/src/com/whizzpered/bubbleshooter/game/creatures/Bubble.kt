@@ -1,14 +1,13 @@
 package com.whizzpered.bubbleshooter.game.creatures
 
 import com.badlogic.gdx.graphics.Color
-import com.whizzpered.bubbleshooter.engine.graphics.Billboard
-import com.whizzpered.bubbleshooter.engine.graphics.Model
 import com.whizzpered.bubbleshooter.engine.handler.Main
 import com.whizzpered.bubbleshooter.engine.memory.AbstractPool
 import com.whizzpered.bubbleshooter.engine.memory.AbstractPoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.PoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.Poolable
 import com.whizzpered.bubbleshooter.game.Game
+import com.whizzpered.bubbleshooter.utils.dist
 
 enum class BubbleType {
     BLUE(25, 105, 255),
@@ -78,8 +77,25 @@ class Bubble : Creature {
         }
     }
 
+    val collisionHandler = handler { delta ->
+        val currgame = game
+        if (currgame is Game) {
+            val game = currgame as Game
+            game.context.forEach {
+                if (it is Hitable) {
+                    val d = dist(it.position.x, it.position.y, position.x, position.y)
+                    if (d <= it.hitRadius + radius) {
+                        lifetime = -100f
+                        (it as Hitable).hit(this)
+                    }
+                }
+            }
+        }
+    }
+
     override fun initHandlers() {
         initialActHandlers.add(movementHandler)
+        initialActHandlers.add(collisionHandler)
         initialRenderHandlers.add(renderHandler)
     }
 }

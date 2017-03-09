@@ -1,11 +1,13 @@
 package com.whizzpered.bubbleshooter.game.creatures
 
+import com.whizzpered.bubbleshooter.engine.entities.Entity
 import com.whizzpered.bubbleshooter.engine.graphics.Billboard
 import com.whizzpered.bubbleshooter.engine.graphics.Model
 import com.whizzpered.bubbleshooter.engine.memory.AbstractPool
 import com.whizzpered.bubbleshooter.engine.memory.AbstractPoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.PoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.Poolable
+import com.whizzpered.bubbleshooter.game.Game
 import com.whizzpered.bubbleshooter.utils.atan2
 import com.whizzpered.bubbleshooter.utils.cos
 import com.whizzpered.bubbleshooter.utils.dist
@@ -17,7 +19,7 @@ private val model = Model {
     it += Billboard("enemy/body", 1f, 1f, 0f, 0f, .5f)
 }
 
-class Enemy : Creature {
+class Enemy : Creature, Hitable {
 
     //POOL\//
     companion object config : PoolConfiguration<Enemy>(32, { Enemy(it) })
@@ -34,10 +36,11 @@ class Enemy : Creature {
     //\POOL//
 
     override fun reset() {
+
     }
 
     override fun lock() {
-
+        radius = .5f
     }
 
     var target = this.position.copy()
@@ -71,5 +74,18 @@ class Enemy : Creature {
         initialActHandlers.add(movementHandler)
         initialRenderHandlers.add(renderHandler)
     }
+
+    override fun hit(hitter: Entity) {
+        if (hitter is Bubble) {
+            val currgame = this.game
+            if (currgame is Game) {
+                val game = currgame as Game
+                game.context -= this
+            }
+        }
+    }
+
+    override val hitRadius: Float
+        get() = radius
 
 }
