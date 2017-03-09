@@ -6,29 +6,36 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.whizzpered.bubbleshooter.engine.handler.Main
 import com.whizzpered.bubbleshooter.engine.memory.makeListFrom
 import kotlin.concurrent.thread
+import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class Sprite internal constructor(val atlas: Atlas, val texture: String, var color: Color) {
-    var x = 0f
-    var y = 0f
-    var width = 0f
-    var height = 0f
+class Sprite internal constructor(val atlas: Atlas, val texture: String) {
+    class SpriteBuilder internal constructor() {
+        var x = 0f
+        var y = 0f
+        var width = 0f
+        var height = 0f
+        var angle = 0f
+        var color: Color = Color(1f, 1f, 1f, 1f)
 
-    public fun setPosition(x: Float = 0f, y: Float = 0f) {
-        this.x = x
-        this.y = y
+        public fun setPosition(x: Float = 0f, y: Float = 0f) {
+            this.x = x
+            this.y = y
+        }
+
+        public fun setSize(width: Float = 0f, height: Float = 0f) {
+            this.width = width
+            this.height = height
+        }
     }
 
-    public fun setSize(width: Float = 0f, height: Float = 0f) {
-        this.width = width
-        this.height = height
-    }
+    private val builder = SpriteBuilder()
 
     private var tryed = false
     private var libgdxsprite: com.badlogic.gdx.graphics.g2d.Sprite? = null
     private var handler: Atlas.AtlasHandler? = null
 
-    fun render() {
+    fun render(build: (SpriteBuilder) -> Unit) {
         if (!Main.isRenderThread())
             return
         if (!tryed || atlas.handler != handler) {
@@ -40,13 +47,21 @@ class Sprite internal constructor(val atlas: Atlas, val texture: String, var col
         }
         val v = libgdxsprite
         if (v != null) {
-            val x = x
-            val y = y
-            val width = width
-            val height = height
-            v.color = color
-            v.x = x - width / 2f
-            v.y = y - height / 2f
+            builder.x = 0f
+            builder.y = 0f
+            builder.width = 0f
+            builder.height = 0f
+            builder.angle = 0f
+            builder.color = Color.WHITE
+            build(builder)
+            val x = builder.x
+            val y = builder.y
+            val width = builder.width
+            val height = builder.height
+            v.setOrigin(v.width / 2, v.height / 2)
+            v.color = builder.color
+            v.setCenter(x, y)
+            v.rotation = builder.angle
             v.setSize(width, height)
             val b = Main.batch
             if (b != null && b.isDrawing)
@@ -126,6 +141,19 @@ class Atlas {
         } while(v != null)
     }
 
-    fun createSprite(texture: String, color: Color = Color.WHITE): Sprite = Sprite(this, texture, color)
+    private val sprites = mutableListOf<WeakReference<Sprite>>()
+
+    fun getSprite(texture: String): Sprite {
+        synchronized(sprites) {
+            sprites.forEach {
+                val v = it.get()
+                if (v != null && v.texture == texture)
+                    return v
+            }
+        }
+        val v = Sprite(this, texture)
+        sprites += WeakReference(v)
+        return v
+    }
 
 }

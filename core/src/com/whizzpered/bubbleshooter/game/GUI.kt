@@ -8,5 +8,5 @@ fun makeGUI() {
             position = Position(Coordinate.AT_CENTER, 0f from Border.TOP),
             size = Size(.5f.toLength(), .5f.toLength())
     )
-    Game.gui += pic
+    //Game.gui += pic
 }
