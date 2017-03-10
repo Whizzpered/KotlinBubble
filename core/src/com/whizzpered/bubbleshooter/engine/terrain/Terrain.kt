@@ -1,7 +1,9 @@
 package com.whizzpered.bubbleshooter.engine.terrain
 
+import com.whizzpered.bubbleshooter.engine.entities.Entity
 import com.whizzpered.bubbleshooter.engine.handler.AbstractGame
 import com.whizzpered.bubbleshooter.engine.handler.Main
+import com.whizzpered.bubbleshooter.engine.memory.StrangeCollection
 import com.whizzpered.bubbleshooter.game.Game
 
 private object EMPTY_TILE : Tile(true, "") {
@@ -61,8 +63,9 @@ private fun generate(it: Terrain) {
     }
 }
 
-class Terrain(val width: Int, val height: Int, val game: AbstractGame,
-              val allTiles: List<Tile>, val generator: (Terrain) -> Unit = ::generate) {
+class Terrain(size: Int, val width: Int, val height: Int, val game: AbstractGame,
+              val allTiles: List<Tile>, val generator: (Terrain) -> Unit = ::generate) :
+        StrangeCollection<Entity>(size) {
 
 
     private val defaultTile = if (allTiles.size > 0) allTiles[0] else EMPTY_TILE
@@ -106,5 +109,9 @@ class Terrain(val width: Int, val height: Int, val game: AbstractGame,
         val nx = ((x + defaultTile.size / 2) / defaultTile.size).toInt()
         val ny = ((y + defaultTile.size / 2) / defaultTile.size).toInt()
         return tiles[correct(nx, width)][correct(ny, height)];
+    }
+
+    override fun forEach(eacher: (Entity) -> Unit) {
+
     }
 }

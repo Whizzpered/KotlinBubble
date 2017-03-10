@@ -2,14 +2,50 @@ package com.whizzpered.bubbleshooter.engine.memory
 
 import java.util.*
 
-class UnpureSet<T>(val length: Int) {
+abstract class StrangeCollection<T>(val size: Int) {
+    abstract fun forEach(eacher: (T) -> Unit)
+}
 
+private fun <T> countSize(col: StrangeCollection<T>, vararg cols: StrangeCollection<T>): Int {
+    val v = arrayOf(col, *cols)
+    var i = 0
+    v.forEach { i += it.size }
+    return i
+}
+
+class Mix<T> : StrangeCollection<T> {
+    private val arr: Array<StrangeCollection<T>>
+
+    constructor(col: StrangeCollection<T>, vararg cols: StrangeCollection<T>) : super(countSize(col, *cols)) {
+        val v = arrayOf(col, *cols)
+        arr = v
+    }
+
+    override fun forEach(eacher: (T) -> Unit) {
+        arr.forEach { it.forEach { eacher(it) } }
+    }
+}
+
+class SortedMix<T> : StrangeCollection<T> {
+    private val arr: Array<StrangeCollection<T>>
+
+    constructor(col: StrangeCollection<T>, vararg cols: StrangeCollection<T>) : super(countSize(col, *cols)) {
+        val v = arrayOf(col, *cols)
+        arr = v
+    }
+
+    override fun forEach(eacher: (T) -> Unit) {
+        arr.forEach { it.forEach { eacher(it) } }
+    }
+}
+
+class UnpureSet<T>(size: Int) : StrangeCollection<T>(size) {
     internal val content: Array<Any?>
     var range = 0
     var curar = 0
 
     init {
-        content = Array(length) { null as Any? }
+        content = Array(size) { null as Any? }
     }
 
     fun add(t: T): Boolean {
@@ -19,10 +55,10 @@ class UnpureSet<T>(val length: Int) {
                 return true
             else if (content[i] == null) {
                 content[i] = t
-                range = Math.min(Math.max(i + 1, range), length)
+                range = Math.min(Math.max(i + 1, range), size)
                 return true
             }
-        } while (++i < length)
+        } while (++i < size)
         return false
     }
 
@@ -55,7 +91,7 @@ class UnpureSet<T>(val length: Int) {
         return false
     }
 
-    fun forEach(eacher: (T) -> Unit) {
+    override fun forEach(eacher: (T) -> Unit) {
         var i = 0
         do {
             val t = content[i]
@@ -80,7 +116,7 @@ class UnpureSet<T>(val length: Int) {
 
     class SortedBuffer<T> internal constructor(val unpureset: UnpureSet<T>, comparator: Comparator<T>) {
 
-        val arr: Array<Any?> = Array(unpureset.length) { null }
+        val arr: Array<Any?> = Array(unpureset.size) { null }
 
         val comp = object : Comparator<Any?> {
             override fun compare(p0: Any?, p1: Any?): Int {
@@ -138,7 +174,7 @@ class UnpureSet<T>(val length: Int) {
     }
 }
 
-class Context<T : Poolable>(val length: Int,
+class Context<T : Poolable>(val size: Int,
                             private val handleAdding: (T) -> Unit = {},
                             private val handleRemoving: (T) -> Unit = {}) {
     val pools = mutableListOf<Pair<AbstractPoolConfiguration<out T>, AbstractPool<out T>>>()
@@ -152,7 +188,7 @@ class Context<T : Poolable>(val length: Int,
         }
     }
 
-    private val content = UnpureSet<T>(length)
+    private val content = UnpureSet<T>(size)
 
     fun add(t: T) {
         handleAdding(t)
