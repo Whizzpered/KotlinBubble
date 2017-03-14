@@ -27,7 +27,7 @@ object Game : AbstractGame() {
             game = this,
             allTiles = allTiles
     )
-    internal val renderBuffer = Mix(context, terrain).sortedWith {
+    internal val renderMix = Mix(context, terrain).sortedWith {
         a, b ->
         -(a as Entity).position.y.compareTo((b as Entity).position.y)
     }
@@ -56,7 +56,7 @@ object Game : AbstractGame() {
 
     override fun render(delta: Float) {
         terrain.render()
-        renderBuffer.forEach { it.render(delta) }
+        renderMix.forEach { it.render(delta) }
     }
 
     override fun ai(delta: Float) {
