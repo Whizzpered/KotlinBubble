@@ -3,6 +3,7 @@ package com.whizzpered.bubbleshooter.game
 import com.whizzpered.bubbleshooter.engine.entities.Entity
 import com.whizzpered.bubbleshooter.engine.handler.AbstractGame
 import com.whizzpered.bubbleshooter.engine.memory.Context
+import com.whizzpered.bubbleshooter.engine.memory.Mix
 import com.whizzpered.bubbleshooter.engine.memory.makeListFrom
 import com.whizzpered.bubbleshooter.engine.terrain.Terrain
 import com.whizzpered.bubbleshooter.engine.terrain.Tile
@@ -18,13 +19,18 @@ object Game : AbstractGame() {
 
             }
     )
-
-    internal val renderBuffer = context.sorted {
+    val allTiles = makeListFrom<Tile, Tiles>(Tiles.values()) { it.tile }
+    val terrain: Terrain = Terrain(
+            size = 50,
+            width = 64,
+            height = 64,
+            game = this,
+            allTiles = allTiles
+    )
+    internal val renderBuffer = Mix(context, terrain).sortedWith {
         a, b ->
         -(a as Entity).position.y.compareTo((b as Entity).position.y)
     }
-    val allTiles = makeListFrom<Tile, Tiles>(Tiles.values()) { it.tile }
-    val terrain: Terrain = Terrain(64, 64, this, allTiles)
 
     override fun init() {
         for (i in 0..50) {

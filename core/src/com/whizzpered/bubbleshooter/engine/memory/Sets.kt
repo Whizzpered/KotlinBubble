@@ -24,18 +24,53 @@ class Mix<T> : StrangeCollection<T> {
     override fun forEach(eacher: (T) -> Unit) {
         arr.forEach { it.forEach { eacher(it) } }
     }
+
+    fun sortedWith(by: (T, T) -> Int): MixSortedBy<T> {
+        return MixSortedBy(arr, size, by)
+    }
 }
 
-class SortedMix<T> : StrangeCollection<T> {
+class MixSortedBy<T> : StrangeCollection<T> {
     private val arr: Array<StrangeCollection<T>>
+    private val trueArr: Array<T?>
+    private val by: Comparator<T?>
 
-    constructor(col: StrangeCollection<T>, vararg cols: StrangeCollection<T>) : super(countSize(col, *cols)) {
-        val v = arrayOf(col, *cols)
+    internal constructor(v: Array<StrangeCollection<T>>, s: Int, b: (T, T) -> Int) : super(s) {
         arr = v
+        by = object : Comparator<T?> {
+            override fun compare(p0: T?, p1: T?): Int {
+                if (p0 == null && p1 == null)
+                    return 0
+                else if (p1 == null)
+                    return -1
+                else if (p0 == null)
+                    return 1
+                else
+                    try {
+                        return b(p0, p1)
+                    } catch (e: ClassCastException) {
+
+                    }
+                return 0
+            }
+        }
+        @Suppress("UNCHECKED_CAST")
+        trueArr = Array<Any?>(size, { null }) as Array<T?>
     }
 
     override fun forEach(eacher: (T) -> Unit) {
-        arr.forEach { it.forEach { eacher(it) } }
+        var i = 0
+        arr.forEach {
+            it.forEach {
+                if (i < size)
+                    trueArr[i++] = it
+            }
+        }
+        for (i in i..size - 1) {
+            trueArr[i] = null
+        }
+        trueArr.sortWith(by)
+        trueArr.forEach{ if (it != null) eacher(it) }
     }
 }
 
@@ -104,16 +139,6 @@ class UnpureSet<T>(size: Int) : StrangeCollection<T>(size) {
         } while (++i < range)
     }
 
-    fun sorted(comparator: Comparator<T>) = SortedBuffer<T>(this, comparator)
-
-    fun sorted(comparator: (a: T, b: T) -> Int) = SortedBuffer<T>(this,
-            object : Comparator<T> {
-                override fun compare(p0: T, p1: T): Int {
-                    return comparator(p0, p1)
-                }
-            }
-    )
-
     class SortedBuffer<T> internal constructor(val unpureset: UnpureSet<T>, comparator: Comparator<T>) {
 
         val arr: Array<Any?> = Array(unpureset.size) { null }
@@ -174,9 +199,9 @@ class UnpureSet<T>(size: Int) : StrangeCollection<T>(size) {
     }
 }
 
-class Context<T : Poolable>(val size: Int,
+class Context<T : Poolable>(size: Int,
                             private val handleAdding: (T) -> Unit = {},
-                            private val handleRemoving: (T) -> Unit = {}) {
+                            private val handleRemoving: (T) -> Unit = {}) : StrangeCollection<T>(size) {
     val pools = mutableListOf<Pair<AbstractPoolConfiguration<out T>, AbstractPool<out T>>>()
 
     infix fun <G : T> new(p: PoolConfiguration<G>): G {
@@ -198,10 +223,6 @@ class Context<T : Poolable>(val size: Int,
         }
     }
 
-    fun sorted(comparator: Comparator<T>) = content.sorted(comparator)
-
-    fun sorted(comparator: (T, T) -> Int) = content.sorted(comparator)
-
     fun remove(t: T) {
         handleRemoving(t)
         t.unlock()
@@ -216,7 +237,7 @@ class Context<T : Poolable>(val size: Int,
         remove(t)
     }
 
-    fun forEach(eacher: (T) -> Unit) {
+    override fun forEach(eacher: (T) -> Unit) {
         content.forEach { eacher(it) }
     }
 }

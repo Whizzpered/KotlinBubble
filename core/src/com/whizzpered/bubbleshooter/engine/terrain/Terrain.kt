@@ -1,9 +1,12 @@
 package com.whizzpered.bubbleshooter.engine.terrain
 
 import com.whizzpered.bubbleshooter.engine.entities.Entity
+import com.whizzpered.bubbleshooter.engine.graphics.MutablePoint
+import com.whizzpered.bubbleshooter.engine.graphics.Point
 import com.whizzpered.bubbleshooter.engine.handler.AbstractGame
 import com.whizzpered.bubbleshooter.engine.handler.Main
 import com.whizzpered.bubbleshooter.engine.memory.StrangeCollection
+import com.whizzpered.bubbleshooter.engine.utils.spiral
 import com.whizzpered.bubbleshooter.game.Game
 
 private object EMPTY_TILE : Tile(true, "") {
@@ -69,7 +72,8 @@ class Terrain(size: Int, val width: Int, val height: Int, val game: AbstractGame
 
 
     private val defaultTile = if (allTiles.size > 0) allTiles[0] else EMPTY_TILE
-    private val tiles: Array<Array<Tile>> = Array(width) { Array(height) { defaultTile } }
+    private val tiles = Array(width) { Array(height) { defaultTile } }
+    private val obstacles = Array(width) { Array<Entity?>(height) { null } }
 
     init {
         generator(this)
@@ -111,7 +115,39 @@ class Terrain(size: Int, val width: Int, val height: Int, val game: AbstractGame
         return tiles[correct(nx, width)][correct(ny, height)];
     }
 
-    override fun forEach(eacher: (Entity) -> Unit) {
+    fun forEach(posx: Float, posy: Float, radius: Float, eacher: (Entity) -> Unit) {
+        var i = 0
+        val nx = ((posx + defaultTile.size / 2) / defaultTile.size).toInt()
+        val ny = ((posy + defaultTile.size / 2) / defaultTile.size).toInt()
+        spiral { x, y ->
+            if (Math.max(Math.abs(x), Math.abs(y)) * defaultTile.size >= radius || i >= size)
+                false
+            else {
+                val rx = correct(nx + x, width)
+                val ry = correct(ny + y, height)
+                val ob = obstacles[rx][ry]
+                if (ob != null) {
+                    eacher(ob)
+                    i++
+                }
+                true
+            }
+        }
+    }
 
+    fun forEach(pos: Point, radius: Float, eacher: (Entity) -> Unit) {
+        forEach(pos.x, pos.y, radius, eacher)
+    }
+
+    fun forEach(pos: MutablePoint, radius: Float, eacher: (Entity) -> Unit) {
+        forEach(pos.x, pos.y, radius, eacher)
+    }
+
+    override fun forEach(eacher: (Entity) -> Unit) {
+        forEach(
+                game.camera.x, game.camera.y,
+                Math.max(Main.viewportWidth / 2,
+                        Main.viewportHeight / 2),
+                eacher)
     }
 }

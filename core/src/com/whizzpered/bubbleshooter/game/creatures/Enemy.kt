@@ -8,10 +8,10 @@ import com.whizzpered.bubbleshooter.engine.memory.AbstractPoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.PoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.Poolable
 import com.whizzpered.bubbleshooter.game.Game
-import com.whizzpered.bubbleshooter.utils.atan2
-import com.whizzpered.bubbleshooter.utils.cos
-import com.whizzpered.bubbleshooter.utils.dist
-import com.whizzpered.bubbleshooter.utils.sin
+import com.whizzpered.bubbleshooter.engine.utils.atan2
+import com.whizzpered.bubbleshooter.engine.utils.cos
+import com.whizzpered.bubbleshooter.engine.utils.dist
+import com.whizzpered.bubbleshooter.engine.utils.sin
 
 private val model = Model {
     it += Billboard("enemy/left_eye", 0.3f, 0.3f, 0f, .2f, .95f)

@@ -3,7 +3,7 @@ package com.whizzpered.bubbleshooter.engine.graphics
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
 import com.whizzpered.bubbleshooter.engine.handler.Main
-import com.whizzpered.bubbleshooter.utils.sin
+import com.whizzpered.bubbleshooter.engine.utils.sin
 import java.util.*
 
 /**
