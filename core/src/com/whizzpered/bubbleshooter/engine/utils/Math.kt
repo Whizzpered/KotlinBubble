@@ -1,4 +1,4 @@
-package com.whizzpered.bubbleshooter.utils
+package com.whizzpered.bubbleshooter.engine.utils
 
 import com.badlogic.gdx.math.RandomXS128
 import java.util.*

@@ -7,7 +7,7 @@ import com.whizzpered.bubbleshooter.engine.memory.AbstractPoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.PoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.Poolable
 import com.whizzpered.bubbleshooter.game.Game
-import com.whizzpered.bubbleshooter.utils.dist
+import com.whizzpered.bubbleshooter.engine.utils.dist
 
 enum class BubbleType {
     BLUE(25, 105, 255),

@@ -2,14 +2,85 @@ package com.whizzpered.bubbleshooter.engine.memory
 
 import java.util.*
 
-class UnpureSet<T>(val length: Int) {
+abstract class StrangeCollection<T>(val size: Int) {
+    abstract fun forEach(eacher: (T) -> Unit)
+}
 
+private fun <T> countSize(col: StrangeCollection<T>, vararg cols: StrangeCollection<T>): Int {
+    val v = arrayOf(col, *cols)
+    var i = 0
+    v.forEach { i += it.size }
+    return i
+}
+
+class Mix<T> : StrangeCollection<T> {
+    private val arr: Array<StrangeCollection<T>>
+
+    constructor(col: StrangeCollection<T>, vararg cols: StrangeCollection<T>) : super(countSize(col, *cols)) {
+        val v = arrayOf(col, *cols)
+        arr = v
+    }
+
+    override fun forEach(eacher: (T) -> Unit) {
+        arr.forEach { it.forEach { eacher(it) } }
+    }
+
+    fun sortedWith(by: (T, T) -> Int): MixSortedBy<T> {
+        return MixSortedBy(arr, size, by)
+    }
+}
+
+class MixSortedBy<T> : StrangeCollection<T> {
+    private val arr: Array<StrangeCollection<T>>
+    private val trueArr: Array<T?>
+    private val by: Comparator<T?>
+
+    internal constructor(v: Array<StrangeCollection<T>>, s: Int, b: (T, T) -> Int) : super(s) {
+        arr = v
+        by = object : Comparator<T?> {
+            override fun compare(p0: T?, p1: T?): Int {
+                if (p0 == null && p1 == null)
+                    return 0
+                else if (p1 == null)
+                    return -1
+                else if (p0 == null)
+                    return 1
+                else
+                    try {
+                        return b(p0, p1)
+                    } catch (e: ClassCastException) {
+
+                    }
+                return 0
+            }
+        }
+        @Suppress("UNCHECKED_CAST")
+        trueArr = Array<Any?>(size, { null }) as Array<T?>
+    }
+
+    override fun forEach(eacher: (T) -> Unit) {
+        var i = 0
+        arr.forEach {
+            it.forEach {
+                if (i < size)
+                    trueArr[i++] = it
+            }
+        }
+        for (i in i..size - 1) {
+            trueArr[i] = null
+        }
+        trueArr.sortWith(by)
+        trueArr.forEach{ if (it != null) eacher(it) }
+    }
+}
+
+class UnpureSet<T>(size: Int) : StrangeCollection<T>(size) {
     internal val content: Array<Any?>
     var range = 0
     var curar = 0
 
     init {
-        content = Array(length) { null as Any? }
+        content = Array(size) { null as Any? }
     }
 
     fun add(t: T): Boolean {
@@ -19,10 +90,10 @@ class UnpureSet<T>(val length: Int) {
                 return true
             else if (content[i] == null) {
                 content[i] = t
-                range = Math.min(Math.max(i + 1, range), length)
+                range = Math.min(Math.max(i + 1, range), size)
                 return true
             }
-        } while (++i < length)
+        } while (++i < size)
         return false
     }
 
@@ -55,7 +126,7 @@ class UnpureSet<T>(val length: Int) {
         return false
     }
 
-    fun forEach(eacher: (T) -> Unit) {
+    override fun forEach(eacher: (T) -> Unit) {
         var i = 0
         do {
             val t = content[i]
@@ -68,19 +139,9 @@ class UnpureSet<T>(val length: Int) {
         } while (++i < range)
     }
 
-    fun sorted(comparator: Comparator<T>) = SortedBuffer<T>(this, comparator)
-
-    fun sorted(comparator: (a: T, b: T) -> Int) = SortedBuffer<T>(this,
-            object : Comparator<T> {
-                override fun compare(p0: T, p1: T): Int {
-                    return comparator(p0, p1)
-                }
-            }
-    )
-
     class SortedBuffer<T> internal constructor(val unpureset: UnpureSet<T>, comparator: Comparator<T>) {
 
-        val arr: Array<Any?> = Array(unpureset.length) { null }
+        val arr: Array<Any?> = Array(unpureset.size) { null }
 
         val comp = object : Comparator<Any?> {
             override fun compare(p0: Any?, p1: Any?): Int {
@@ -138,9 +199,9 @@ class UnpureSet<T>(val length: Int) {
     }
 }
 
-class Context<T : Poolable>(val length: Int,
+class Context<T : Poolable>(size: Int,
                             private val handleAdding: (T) -> Unit = {},
-                            private val handleRemoving: (T) -> Unit = {}) {
+                            private val handleRemoving: (T) -> Unit = {}) : StrangeCollection<T>(size) {
     val pools = mutableListOf<Pair<AbstractPoolConfiguration<out T>, AbstractPool<out T>>>()
 
     infix fun <G : T> new(p: PoolConfiguration<G>): G {
@@ -152,7 +213,7 @@ class Context<T : Poolable>(val length: Int,
         }
     }
 
-    private val content = UnpureSet<T>(length)
+    private val content = UnpureSet<T>(size)
 
     fun add(t: T) {
         handleAdding(t)
@@ -161,10 +222,6 @@ class Context<T : Poolable>(val length: Int,
             t.unlock()
         }
     }
-
-    fun sorted(comparator: Comparator<T>) = content.sorted(comparator)
-
-    fun sorted(comparator: (T, T) -> Int) = content.sorted(comparator)
 
     fun remove(t: T) {
         handleRemoving(t)
@@ -180,7 +237,7 @@ class Context<T : Poolable>(val length: Int,
         remove(t)
     }
 
-    fun forEach(eacher: (T) -> Unit) {
+    override fun forEach(eacher: (T) -> Unit) {
         content.forEach { eacher(it) }
     }
 }

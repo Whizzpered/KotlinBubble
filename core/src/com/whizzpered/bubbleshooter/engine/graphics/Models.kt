@@ -3,7 +3,7 @@ package com.whizzpered.bubbleshooter.engine.graphics
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
 import com.whizzpered.bubbleshooter.engine.handler.Main
-import com.whizzpered.bubbleshooter.utils.sin
+import com.whizzpered.bubbleshooter.engine.utils.sin
 import java.util.*
 
 /**
@@ -11,7 +11,7 @@ import java.util.*
  */
 
 abstract class Shape {
-    val position: MutablePoint3D
+    val position: MutablePoint
     var priority: Float
     var deformation = 0f
     var angle = 0f
@@ -23,22 +23,22 @@ abstract class Shape {
     }
 
     constructor(priority: Float = 0f) {
-        position = MutablePoint3D(0f, 0f, 0f)
+        position = MutablePoint(0f, 0f, 0f)
         this.priority = priority
     }
 
-    constructor(p: Point3D, priority: Float = 0f) {
-        position = p.toMutablePoint3D()
+    constructor(p: Point, priority: Float = 0f) {
+        position = p.toMutablePoint()
         this.priority = priority
     }
 
-    constructor(p: MutablePoint3D, priority: Float = 0f) {
+    constructor(p: MutablePoint, priority: Float = 0f) {
         position = p.copy()
         this.priority = priority
     }
 
     constructor(x: Float, y: Float, z: Float, priority: Float = 0f) {
-        position = MutablePoint3D(x, y, z)
+        position = MutablePoint(x, y, z)
         this.priority = priority
     }
 
@@ -66,14 +66,14 @@ class Billboard : Shape {
         sprite = Main.atlas.getSprite(texture)
     }
 
-    constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f, p: Point3D) : super(p) {
+    constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f, p: Point) : super(p) {
         this.texture = texture
         this.width = width
         this.height = height
         sprite = Main.atlas.getSprite(texture)
     }
 
-    constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f, p: MutablePoint3D) : super(p) {
+    constructor(texture: String, width: Float = 1.0f, height: Float = 1.0f, p: MutablePoint) : super(p) {
         this.texture = texture
         this.width = width
         this.height = height
@@ -108,12 +108,12 @@ class Circle : Shape {
         this.color = color
     }
 
-    constructor(p: Point3D, radius: Float = 0f, color: Color = Color.BLACK) : super(p) {
+    constructor(p: Point, radius: Float = 0f, color: Color = Color.BLACK) : super(p) {
         this.radius = radius
         this.color = color
     }
 
-    constructor(p: MutablePoint3D, radius: Float = 0f, color: Color = Color.BLACK) : super(p) {
+    constructor(p: MutablePoint, radius: Float = 0f, color: Color = Color.BLACK) : super(p) {
         this.radius = radius
         this.color = color
     }
@@ -149,14 +149,14 @@ class Model : Shape {
         shapes = toArray(m.shapes)
     }
 
-    constructor(p: Point3D, initializer: (ModelBuilder) -> Unit) : super(p) {
+    constructor(p: Point, initializer: (ModelBuilder) -> Unit) : super(p) {
         val m = ModelBuilder(this)
         initializer(m)
         m.lock()
         shapes = toArray(m.shapes)
     }
 
-    constructor(p: MutablePoint3D, initializer: (ModelBuilder) -> Unit) : super(p) {
+    constructor(p: MutablePoint, initializer: (ModelBuilder) -> Unit) : super(p) {
         val m = ModelBuilder(this)
         initializer(m)
         m.lock()

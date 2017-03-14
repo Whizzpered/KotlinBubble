@@ -163,7 +163,7 @@ object Main : ApplicationAdapter() {
                 lastTime = currTime
             }
 
-            if (Input.keyboard[Key.MAC_COMMAND + Key.W])
+            if (Input.keyboard[Key.CMD + Key.W])
                 Gdx.app.exit()
         }
     }

@@ -11,8 +11,8 @@ import com.whizzpered.bubbleshooter.engine.memory.AbstractPoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.PoolConfiguration
 import com.whizzpered.bubbleshooter.engine.memory.Poolable
 import com.whizzpered.bubbleshooter.game.Game
-import com.whizzpered.bubbleshooter.utils.cos
-import com.whizzpered.bubbleshooter.utils.sin
+import com.whizzpered.bubbleshooter.engine.utils.cos
+import com.whizzpered.bubbleshooter.engine.utils.sin
 import java.lang.Math.abs
 
 private val model = Model {
