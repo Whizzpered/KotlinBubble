@@ -6,7 +6,7 @@ import com.whizzpered.bubbleshooter.engine.memory.ActionContainer
 open class Coordinate {
     companion object AT_CENTER : Coordinate() {
 
-    }
+    }й
 
     val from: Border
     var dist = 0f

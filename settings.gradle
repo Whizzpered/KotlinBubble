@@ -1,3 +1,4 @@
+include ':hls'
 import org.gradle.internal.os.OperatingSystem
 
 if (OperatingSystem.current().isMacOsX()) {

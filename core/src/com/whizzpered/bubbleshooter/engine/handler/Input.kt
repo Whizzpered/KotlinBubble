@@ -17,7 +17,7 @@ object Input {
                 keyboard.keys[keycode] = true
                 for (k in Key.values())
                     if (k.keycode == keycode) {
-                        keyboard.keyReleasedActions(k)
+                        keyboard.keyPressedActions(k)
                         if (keyboard.binding)
                             keyboard.bind = k
                         break

@@ -107,7 +107,7 @@ object Main : ApplicationAdapter() {
             if (it == Key.L)
                 atlas.quality++
             if (it == Key.K)
-                atlas.quality++
+                atlas.quality--
         }
         resume()
     }
@@ -167,7 +167,7 @@ object Main : ApplicationAdapter() {
                 Gdx.app.exit()
         }
     }
-
+    
     override fun dispose() {
         dispose = true
         batch?.dispose()
